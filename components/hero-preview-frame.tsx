@@ -1,7 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { Monitor, Tablet, Smartphone, ExternalLink, RotateCcw } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ComputerIcon,
+  Tablet01Icon,
+  SmartPhone01Icon,
+  ArrowUpRight01Icon,
+  ReloadIcon,
+} from "@hugeicons/core-free-icons";
 import { cn } from "@/lib/utils";
 
 type DeviceMode = "desktop" | "tablet" | "mobile";
@@ -57,7 +64,7 @@ export function HeroPreviewFrame({
                   : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
               )}
             >
-              <Monitor className="size-3.5" />
+              <HugeiconsIcon icon={ComputerIcon} size={15} />
             </button>
             <button
               type="button"
@@ -70,7 +77,7 @@ export function HeroPreviewFrame({
                   : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
               )}
             >
-              <Tablet className="size-3.5" />
+              <HugeiconsIcon icon={Tablet01Icon} size={15} />
             </button>
             <button
               type="button"
@@ -83,7 +90,7 @@ export function HeroPreviewFrame({
                   : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100"
               )}
             >
-              <Smartphone className="size-3.5" />
+              <HugeiconsIcon icon={SmartPhone01Icon} size={15} />
             </button>
           </div>
 
@@ -94,7 +101,7 @@ export function HeroPreviewFrame({
             title="Reload preview"
             className="p-1.5 rounded-md text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
           >
-            <RotateCcw className="size-3.5" />
+            <HugeiconsIcon icon={ReloadIcon} size={15} />
           </button>
 
           {/* Full preview in new tab */}
@@ -106,7 +113,7 @@ export function HeroPreviewFrame({
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors border border-zinc-200 dark:border-zinc-800 no-underline cursor-pointer"
           >
             <span>Full Preview</span>
-            <ExternalLink className="size-3" />
+            <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} />
           </a>
         </div>
       </div>
@@ -131,4 +138,3 @@ export function HeroPreviewFrame({
     </div>
   );
 }
-

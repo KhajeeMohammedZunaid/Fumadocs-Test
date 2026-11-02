@@ -7,9 +7,9 @@ description: An interactive marketing hero section featuring dynamic text swap, 
 
 A modern, high-conversion landing page hero section with interactive micro-animations powered by `motion/react`, Tailwind CSS v4, and Base UI primitives.
 
-## Preview
+## Live Preview
 
-<HeroPreviewFrame src="/preview/hero-1" title="Hero 1 Preview" />
+<HeroPreviewFrame src="/preview/hero-1" title="Hero Section 1" />
 
 ---
 
@@ -17,138 +17,23 @@ A modern, high-conversion landing page hero section with interactive micro-anima
 
 ### 1. Install Dependencies
 
-Install the required motion library and component primitives:
+Install the required dependencies:
 
 ```bash
-npm install motion @base-ui/react class-variance-authority cn lucide-react
+npm install motion @base-ui/react class-variance-authority cn @hugeicons/react @hugeicons/core-free-icons
 ```
 
-### 2. File Structure
+### 2. Interactive File Structure & Code Explorer
 
-Place the component files in your project according to the structure below:
+Explore each file in the structure below. Click on any file to inspect and copy its exact code:
 
-<Files>
-  <Folder name="components" defaultOpen>
-    <Folder name="hero-sections" defaultOpen>
-      <File name="hero.tsx" />
-      <File name="hero-text-swap.tsx" />
-      <File name="typewriter-prompt.tsx" />
-      <File name="navbar.tsx" />
-    </Folder>
-    <Folder name="ui" defaultOpen>
-      <File name="button.tsx" />
-      <File name="card.tsx" />
-    </Folder>
-  </Folder>
-  <Folder name="public" defaultOpen>
-    <File name="alone-upscaled.png" />
-  </Folder>
-  <Folder name="app" defaultOpen>
-    <File name="globals.css" />
-  </Folder>
-</Files>
-
-### 3. Add CSS Keyframes & Animations
-
-Add the breakpoints, mask fade, and keyframe animations into your `app/globals.css`:
-
-```css
-@theme inline {
-  --breakpoint-xs: 420px;
-  --breakpoint-4k: 2000px;
-}
-
-/* Hero artwork fade */
-.artwork-fade-mask {
-  -webkit-mask-image: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 1) 35%,
-    rgba(0, 0, 0, 0) 90%
-  );
-  mask-image: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 1) 35%,
-    rgba(0, 0, 0, 0) 90%
-  );
-}
-
-/* Badge animations */
-@keyframes floatSarah {
-  0%, 100% {
-    transform: translateY(0) translateX(0);
-  }
-  50% {
-    transform: translateY(-9px) translateX(2.5px);
-  }
-}
-
-@keyframes floatAaron {
-  0%, 100% {
-    transform: translateY(0) translateX(0);
-  }
-  50% {
-    transform: translateY(-11px) translateX(-3px);
-  }
-}
-
-.floating-badge-sarah {
-  animation: floatSarah 4.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-  will-change: transform;
-}
-
-.floating-badge-aaron {
-  animation: floatAaron 5.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
-  animation-delay: -1.4s;
-  will-change: transform;
-}
-
-/* Hero entrance animations */
-@keyframes textEnterRise {
-  from {
-    transform: translateY(18px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-.animate-enter-1,
-.animate-enter-2,
-.animate-enter-3,
-.animate-enter-4 {
-  animation-name: textEnterRise;
-  animation-duration: 720ms;
-  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-  animation-fill-mode: both;
-  will-change: transform, opacity;
-}
-
-.animate-enter-1 { animation-delay: 100ms; }
-.animate-enter-2 { animation-delay: 220ms; }
-.animate-enter-3 { animation-delay: 340ms; }
-.animate-enter-4 { animation-delay: 460ms; }
-
-@media (prefers-reduced-motion: reduce) {
-  .floating-badge-sarah,
-  .floating-badge-aaron,
-  .animate-enter-1,
-  .animate-enter-2,
-  .animate-enter-3,
-  .animate-enter-4 {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
-```
+<InteractiveFileTree />
 
 ---
 
-## Usage
+## Full Page Usage
 
-Use the hero section inside any page or route:
+Import and assemble the layout in your page:
 
 ```tsx
 import { Navbar } from "@/components/hero-sections/navbar";
@@ -167,4 +52,3 @@ export default function Hero1Page() {
   );
 }
 ```
-
