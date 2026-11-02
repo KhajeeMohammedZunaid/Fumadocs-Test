@@ -1,0 +1,170 @@
+---
+title: Hero Section
+description: An interactive marketing hero section featuring dynamic text swap, animated floating badges, a typewriter prompt input card, and responsive canvas layout.
+---
+
+# Hero Section
+
+A modern, high-conversion landing page hero section with interactive micro-animations powered by `motion/react`, Tailwind CSS v4, and Base UI primitives.
+
+## Preview
+
+<HeroPreviewFrame src="/preview/hero-1" title="Hero 1 Preview" />
+
+---
+
+## Manual Installation
+
+### 1. Install Dependencies
+
+Install the required motion library and component primitives:
+
+```bash
+npm install motion @base-ui/react class-variance-authority cn lucide-react
+```
+
+### 2. File Structure
+
+Place the component files in your project according to the structure below:
+
+<Files>
+  <Folder name="components" defaultOpen>
+    <Folder name="hero-sections" defaultOpen>
+      <File name="hero.tsx" />
+      <File name="hero-text-swap.tsx" />
+      <File name="typewriter-prompt.tsx" />
+      <File name="navbar.tsx" />
+    </Folder>
+    <Folder name="ui" defaultOpen>
+      <File name="button.tsx" />
+      <File name="card.tsx" />
+    </Folder>
+  </Folder>
+  <Folder name="public" defaultOpen>
+    <File name="alone-upscaled.png" />
+  </Folder>
+  <Folder name="app" defaultOpen>
+    <File name="globals.css" />
+  </Folder>
+</Files>
+
+### 3. Add CSS Keyframes & Animations
+
+Add the breakpoints, mask fade, and keyframe animations into your `app/globals.css`:
+
+```css
+@theme inline {
+  --breakpoint-xs: 420px;
+  --breakpoint-4k: 2000px;
+}
+
+/* Hero artwork fade */
+.artwork-fade-mask {
+  -webkit-mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 1) 35%,
+    rgba(0, 0, 0, 0) 90%
+  );
+  mask-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 1) 35%,
+    rgba(0, 0, 0, 0) 90%
+  );
+}
+
+/* Badge animations */
+@keyframes floatSarah {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-9px) translateX(2.5px);
+  }
+}
+
+@keyframes floatAaron {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-11px) translateX(-3px);
+  }
+}
+
+.floating-badge-sarah {
+  animation: floatSarah 4.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform;
+}
+
+.floating-badge-aaron {
+  animation: floatAaron 5.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  animation-delay: -1.4s;
+  will-change: transform;
+}
+
+/* Hero entrance animations */
+@keyframes textEnterRise {
+  from {
+    transform: translateY(18px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-enter-1,
+.animate-enter-2,
+.animate-enter-3,
+.animate-enter-4 {
+  animation-name: textEnterRise;
+  animation-duration: 720ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+.animate-enter-1 { animation-delay: 100ms; }
+.animate-enter-2 { animation-delay: 220ms; }
+.animate-enter-3 { animation-delay: 340ms; }
+.animate-enter-4 { animation-delay: 460ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .floating-badge-sarah,
+  .floating-badge-aaron,
+  .animate-enter-1,
+  .animate-enter-2,
+  .animate-enter-3,
+  .animate-enter-4 {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+```
+
+---
+
+## Usage
+
+Use the hero section inside any page or route:
+
+```tsx
+import { Navbar } from "@/components/hero-sections/navbar";
+import { Hero } from "@/components/hero-sections/hero";
+
+export default function Hero1Page() {
+  return (
+    <div className="w-full min-h-screen min-h-[100dvh] md:h-screen md:max-h-screen md:overflow-hidden font-sans text-zinc-950 dark:text-zinc-50 bg-[#fafafa] dark:bg-[#09090b] flex flex-col antialiased m-0 p-0">
+      <div className="w-full flex-1 flex flex-col px-2 sm:px-4 md:px-6 lg:px-8 pb-0 min-h-0 overflow-hidden 4k:px-12">
+        <div className="relative w-full max-w-[1400px] 4k:max-w-[1960px] mx-auto flex-1 min-h-0 border-x border-solid border-zinc-200 dark:border-zinc-800 bg-[#fafafa] dark:bg-[#09090b] flex flex-col">
+          <Navbar />
+          <Hero />
+        </div>
+      </div>
+    </div>
+  );
+}
+```
+

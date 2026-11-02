@@ -8,6 +8,8 @@ import {
 import { notFound } from "next/navigation";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { Files, Folder, File } from "fumadocs-ui/components/files";
+import { HeroPreviewFrame } from "@/components/hero-preview-frame";
 
 // Opt dynamic documentation segment out of instant App Shell validation
 // so prerendered SSG pages stream or load directly without Suspense freeze.
@@ -18,6 +20,10 @@ const mdxComponents = {
   ...defaultMdxComponents,
   Tab,
   Tabs,
+  Files,
+  Folder,
+  File,
+  HeroPreviewFrame,
 };
 
 interface PageProps {
