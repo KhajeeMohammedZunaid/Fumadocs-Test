@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
       "@hugeicons/react",
       "fumadocs-ui",
       "fumadocs-core",
+      "motion",
     ],
   },
   cacheComponents: true,
