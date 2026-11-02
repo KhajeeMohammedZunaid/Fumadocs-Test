@@ -1,0 +1,84 @@
+---
+title: Button
+description: Displays a button or a component that looks like a button with multiple variants and sizes.
+---
+
+import { Button } from '@/components/ui/button';
+
+# Button
+
+A versatile, accessible button component built on top of `@base-ui/react/button` and styled with `class-variance-authority`.
+
+## Interactive Preview
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <div className="flex flex-wrap items-center gap-3 p-6 border rounded-xl not-prose my-2 bg-card">
+      <Button variant="default">Default</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="destructive">Destructive</Button>
+    </div>
+  </Tab>
+  <Tab value="Code">
+```tsx
+import { Button } from "@/components/ui/button";
+
+export default function Example() {
+  return (
+    <div className="flex gap-2">
+      <Button variant="default">Default</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="destructive">Destructive</Button>
+    </div>
+  );
+}
+```
+  </Tab>
+</Tabs>
+
+## Installation
+
+<Callout type="info">
+  This component is already configured in your project at `components/ui/button.tsx`.
+</Callout>
+
+```bash
+# If adding via shadcn CLI
+npx shadcn@latest add button
+```
+
+## Variants
+
+| Variant | Description |
+| :--- | :--- |
+| `default` | Primary solid button for main call-to-actions |
+| `secondary` | Subtle high-contrast button for secondary actions |
+| `outline` | Bordered button with hover background |
+| `ghost` | Borderless button with gentle hover background |
+| `destructive` | High-visibility danger button for destructive operations |
+| `link` | Underlined link-style button |
+
+## Sizes
+
+<Tabs items={["Preview", "Code"]}>
+  <Tab value="Preview">
+    <div className="flex flex-wrap items-center gap-3 p-6 border rounded-xl not-prose my-2 bg-card">
+      <Button size="xs">Extra Small</Button>
+      <Button size="sm">Small</Button>
+      <Button size="default">Default</Button>
+      <Button size="lg">Large</Button>
+    </div>
+  </Tab>
+  <Tab value="Code">
+```tsx
+<Button size="xs">Extra Small</Button>
+<Button size="sm">Small</Button>
+<Button size="default">Default</Button>
+<Button size="lg">Large</Button>
+```
+  </Tab>
+</Tabs>
