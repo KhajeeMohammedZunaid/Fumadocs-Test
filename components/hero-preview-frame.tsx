@@ -7,8 +7,17 @@ import {
   Tablet01Icon,
   SmartPhone01Icon,
   ArrowUpRight01Icon,
+  ArrowDown01Icon,
   ReloadIcon,
 } from "@hugeicons/core-free-icons";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
 type DeviceMode = "desktop" | "tablet" | "mobile";
@@ -51,8 +60,57 @@ export function HeroPreviewFrame({
 
         {/* Device Switcher & Open Link */}
         <div className="flex items-center gap-1.5">
-          {/* Responsive device buttons */}
-          <div className="flex items-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-0.5">
+          {/* Mobile Device Switcher Dropdown (shadcn) */}
+          <div className="flex sm:hidden items-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1.5 px-2 py-1 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-xs font-medium text-zinc-700 dark:text-zinc-300 shadow-xs">
+                {device === "desktop" && <HugeiconsIcon icon={ComputerIcon} size={14} />}
+                {device === "tablet" && <HugeiconsIcon icon={Tablet01Icon} size={14} />}
+                {device === "mobile" && <HugeiconsIcon icon={SmartPhone01Icon} size={14} />}
+                <span className="capitalize">{device}</span>
+                <HugeiconsIcon icon={ArrowDown01Icon} size={12} className="text-zinc-400 ml-0.5" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-40 p-1">
+                <DropdownMenuLabel className="text-[10px] uppercase font-mono tracking-wider text-zinc-400 px-2 py-1">
+                  Preview Device
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => setDevice("desktop")}
+                  className={cn(
+                    "flex items-center gap-2 px-2 py-1.5 text-xs rounded-sm cursor-pointer",
+                    device === "desktop" && "bg-zinc-100 dark:bg-zinc-800 font-medium"
+                  )}
+                >
+                  <HugeiconsIcon icon={ComputerIcon} size={14} />
+                  <span>Desktop (100%)</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setDevice("tablet")}
+                  className={cn(
+                    "flex items-center gap-2 px-2 py-1.5 text-xs rounded-sm cursor-pointer",
+                    device === "tablet" && "bg-zinc-100 dark:bg-zinc-800 font-medium"
+                  )}
+                >
+                  <HugeiconsIcon icon={Tablet01Icon} size={14} />
+                  <span>Tablet (768px)</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setDevice("mobile")}
+                  className={cn(
+                    "flex items-center gap-2 px-2 py-1.5 text-xs rounded-sm cursor-pointer",
+                    device === "mobile" && "bg-zinc-100 dark:bg-zinc-800 font-medium"
+                  )}
+                >
+                  <HugeiconsIcon icon={SmartPhone01Icon} size={14} />
+                  <span>Mobile (390px)</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          {/* Desktop/Tablet segmented device buttons */}
+          <div className="hidden sm:flex items-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 p-0.5">
             <button
               type="button"
               onClick={() => setDevice("desktop")}

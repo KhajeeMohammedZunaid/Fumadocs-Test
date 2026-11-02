@@ -6,13 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "node scripts/patch-fumadocs-css.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
     "@hugeicons/core-free-icons": "^4.4.0",
     "@hugeicons/react": "^1.1.10",
     "@monaco-editor/react": "^4.7.0",
+    "monaco-editor": "^0.57.0",
     "@types/mdx": "^2.0.14",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.1",
