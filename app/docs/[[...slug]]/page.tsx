@@ -11,6 +11,9 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Files, Folder, File } from "fumadocs-ui/components/files";
 import { HeroPreviewFrame } from "@/components/hero-preview-frame";
 import { InteractiveFileTree } from "@/components/interactive-file-tree";
+import { StuxButton } from "@/components/buttons/stux-button";
+import { StuxButtonStudio } from "@/components/stux-button-studio";
+import { StuxButtonCodeViewer } from "@/components/stux-button-code-viewer";
 
 // Opt dynamic documentation segment out of instant App Shell validation
 // so prerendered SSG pages stream or load directly without Suspense freeze.
@@ -26,6 +29,9 @@ const mdxComponents = {
   File,
   HeroPreviewFrame,
   InteractiveFileTree,
+  StuxButton,
+  StuxButtonStudio,
+  StuxButtonCodeViewer,
 };
 
 interface PageProps {

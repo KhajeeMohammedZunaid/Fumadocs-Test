@@ -1,51 +1,164 @@
 ---
-title: Button
-description: Displays a button or a component that looks like a button.
+title: Stux Button
+description: High-contrast architectural button with dual-arrow pass-through physics, edge-fill SVG contour sweeps, and interactive spring physics.
 ---
 
-import { Button } from '@/components/ui/button';
+# Stux Button
 
-# Button
+An architectural, brutalist button component engineered with `motion/react`, 3px high-contrast solid borders, dual-arrow fly-through pass physics, and 5 creative SVG contour fill sweeps.
 
-A versatile button component built on top of `@base-ui/react/button` with `cva` variants.
+## Interactive Studio
 
-## Preview
+Test variants, SVG fill patterns, color palettes, and proportional sizes in real time:
 
-<div className="flex flex-wrap items-center gap-3 p-6 border rounded-xl not-prose my-4">
-  <Button variant="default">Default</Button>
-  <Button variant="secondary">Secondary</Button>
-  <Button variant="outline">Outline</Button>
-  <Button variant="ghost">Ghost</Button>
-  <Button variant="destructive">Destructive</Button>
-</div>
+<StuxButtonStudio />
 
-## Usage
+---
+
+## Installation
+
+### 1. Install Dependencies
+
+Install `motion` for spring micro-interactions:
+
+```bash
+npm install motion
+```
+
+### 2. Add Component Code
+
+Copy the component into your project at `components/buttons/stux-button.tsx`:
+
+<StuxButtonCodeViewer />
+
+---
+
+## Basic Usage
+
+Import and use `StuxButton` with any variant, pattern, or color scheme:
 
 ```tsx
-import { Button } from "@/components/ui/button";
+import { StuxButton } from "@/components/buttons/stux-button";
 
 export default function Example() {
-  return <Button variant="default">Click me</Button>;
+  return (
+    <StuxButton variant="edge-fill" fillPattern="wave" colorScheme="yellow">
+      LET'S TALK
+    </StuxButton>
+  );
 }
 ```
 
+---
+
 ## Variants
 
-| Variant | Description |
-| --- | --- |
-| `default` | Primary solid button |
-| `secondary` | Muted background with high contrast text |
-| `outline` | Bordered button with hover background |
-| `ghost` | Transparent background with hover effect |
-| `destructive` | Destructive danger button |
-| `link` | Underlined text button |
+### 1. Edge Fill (`edge-fill`)
+
+Eliminates border gaps and sweeps a creative SVG leading contour across the container from left to right on hover or mobile tap.
+
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 my-6 not-prose">
+  <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 gap-3">
+    <StuxButton variant="edge-fill" fillPattern="cross" colorScheme="yellow" text="CROSS CUT" />
+    <span className="text-[11px] font-mono text-zinc-500">fillPattern="cross"</span>
+  </div>
+  <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 gap-3">
+    <StuxButton variant="edge-fill" fillPattern="wave" colorScheme="cyan" text="LIQUID WAVE" />
+    <span className="text-[11px] font-mono text-zinc-500">fillPattern="wave"</span>
+  </div>
+  <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 gap-3">
+    <StuxButton variant="edge-fill" fillPattern="cyber" colorScheme="lime" text="CYBER CHEVRON" />
+    <span className="text-[11px] font-mono text-zinc-500">fillPattern="cyber"</span>
+  </div>
+  <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 gap-3">
+    <StuxButton variant="edge-fill" fillPattern="arc" colorScheme="orange" text="CONVEX ARC" />
+    <span className="text-[11px] font-mono text-zinc-500">fillPattern="arc"</span>
+  </div>
+  <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 gap-3">
+    <StuxButton variant="edge-fill" fillPattern="zigzag" colorScheme="violet" text="SAWTOOTH" />
+    <span className="text-[11px] font-mono text-zinc-500">fillPattern="zigzag"</span>
+  </div>
+  <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 gap-3">
+    <StuxButton variant="edge-fill" fillPattern="cross" colorScheme="emerald" text="EMERALD" />
+    <span className="text-[11px] font-mono text-zinc-500">colorScheme="emerald"</span>
+  </div>
+</div>
+
+```tsx
+<StuxButton variant="edge-fill" fillPattern="cross">CROSS CUT</StuxButton>
+<StuxButton variant="edge-fill" fillPattern="wave">LIQUID WAVE</StuxButton>
+<StuxButton variant="edge-fill" fillPattern="cyber">CYBER CHEVRON</StuxButton>
+<StuxButton variant="edge-fill" fillPattern="arc">CONVEX ARC</StuxButton>
+<StuxButton variant="edge-fill" fillPattern="zigzag">SAWTOOTH</StuxButton>
+```
+
+---
+
+### 2. Split Arrow (`default`)
+
+Features a right square endcap with synchronized dual-arrow fly-through pass physics. The active panel expands from the right endcap to fill the entire container.
+
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-4 my-6 not-prose">
+  <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 gap-3">
+    <StuxButton variant="default" colorScheme="yellow" text="LET'S TALK" />
+    <span className="text-[11px] font-mono text-zinc-500">colorScheme="yellow"</span>
+  </div>
+  <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 gap-3">
+    <StuxButton variant="default" colorScheme="cyan" text="EXPLORE WORK" />
+    <span className="text-[11px] font-mono text-zinc-500">colorScheme="cyan"</span>
+  </div>
+  <div className="flex flex-col items-center justify-center p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 gap-3">
+    <StuxButton variant="default" colorScheme="orange" text="LAUNCH APP" />
+    <span className="text-[11px] font-mono text-zinc-500">colorScheme="orange"</span>
+  </div>
+</div>
+
+```tsx
+<StuxButton variant="default" colorScheme="yellow">LET'S TALK</StuxButton>
+<StuxButton variant="default" colorScheme="cyan">EXPLORE WORK</StuxButton>
+<StuxButton variant="default" colorScheme="orange">LAUNCH APP</StuxButton>
+```
+
+---
 
 ## Sizes
 
-| Size | Height |
-| --- | --- |
-| `xs` | Extra small button |
-| `sm` | Small compact button |
-| `default` | Standard button height |
-| `lg` | Large prominent button |
-| `icon` | Square icon-only button |
+Three proportional size scales adjusting height, endcap width, horizontal padding, font size, and arrow travel distance:
+
+<div className="flex flex-wrap items-center justify-center gap-6 my-6 p-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/30 not-prose">
+  <div className="flex flex-col items-center gap-2">
+    <StuxButton size="sm" text="SMALL (44px)" />
+    <span className="text-[11px] font-mono text-zinc-500">size="sm"</span>
+  </div>
+  <div className="flex flex-col items-center gap-2">
+    <StuxButton size="default" text="DEFAULT (52px)" />
+    <span className="text-[11px] font-mono text-zinc-500">size="default"</span>
+  </div>
+  <div className="flex flex-col items-center gap-2">
+    <StuxButton size="lg" text="LARGE (62px)" />
+    <span className="text-[11px] font-mono text-zinc-500">size="lg"</span>
+  </div>
+</div>
+
+| Size | Height | Endcap Width | Padding X | Font Size | Arrow Travel Shift |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `sm` | `44px` | `44px` | `20px` | `14px` | `38px` |
+| `default` | `52px` | `52px` | `28px` | `16px` | `44px` |
+| `lg` | `62px` | `62px` | `36px` | `18px` | `52px` |
+
+---
+
+## Props Specification
+
+| Prop | Type | Default | Description |
+| :--- | :--- | :--- | :--- |
+| `variant` | `"default" \| "edge-fill"` | `"default"` | Determines the interaction mode. `"default"` triggers the split-arrow pass-through animation, while `"edge-fill"` sweeps a seamless SVG contour fill from left to right. |
+| `fillPattern` | `"cross" \| "wave" \| "cyber" \| "arc" \| "zigzag"` | `"cross"` | The leading SVG shape contour used when `variant="edge-fill"`. |
+| `size` | `"sm" \| "default" \| "lg"` | `"default"` | Controls the button's proportional height, endcap width, font size, padding, and arrow distance. |
+| `colorScheme` | `"yellow" \| "lime" \| "cyan" \| "orange" \| "white" \| "violet" \| "emerald"` | `"yellow"` | Built-in high-contrast brutalist color scheme preset. |
+| `text` | `string` | — | Button label text. Overrides default variant fallback text. |
+| `customAccent` | `string` | — | Custom hex or CSS color string to override the accent fill color. |
+| `menuOpen` | `boolean` | `false` | When true, forces the active expanded state (useful for menu triggers or active navigation). |
+| `onClick` | `(e: React.MouseEvent) => void` | — | Click event callback. |
+| `className` | `string` | — | Additional CSS utility classes. |
+| `children` | `React.ReactNode` | — | React children rendered as button content. |
