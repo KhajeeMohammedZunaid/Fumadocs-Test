@@ -13,6 +13,13 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 // so prerendered SSG pages stream or load directly without Suspense freeze.
 export const instant = false;
 
+// Hoist static MDX components to module level (Vercel best practice: server-hoist-static-io & rerender-no-inline-components)
+const mdxComponents = {
+  ...defaultMdxComponents,
+  Tab,
+  Tabs,
+};
+
 interface PageProps {
   params: Promise<{ slug?: string[] }>;
 }
@@ -29,13 +36,7 @@ export default async function Page({ params }: PageProps) {
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
-        <MDX
-          components={{
-            ...defaultMdxComponents,
-            Tab,
-            Tabs,
-          }}
-        />
+        <MDX components={mdxComponents} />
       </DocsBody>
     </DocsPage>
   );

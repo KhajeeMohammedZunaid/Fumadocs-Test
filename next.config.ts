@@ -7,6 +7,12 @@ const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
     agentFeedback: true,
+    optimizePackageImports: [
+      "lucide-react",
+      "@hugeicons/react",
+      "fumadocs-ui",
+      "fumadocs-core",
+    ],
   },
   cacheComponents: true,
   partialPrefetching: true,
