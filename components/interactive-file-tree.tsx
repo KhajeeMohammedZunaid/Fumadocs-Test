@@ -179,7 +179,7 @@ export function InteractiveFileTree() {
       className={cn(
         "my-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden shadow-sm not-prose flex flex-col h-[540px]",
         sidebarOpen
-          ? "lg:grid lg:grid-cols-[230px_1fr]"
+          ? "lg:grid lg:grid-cols-[250px_1fr]"
           : "lg:grid lg:grid-cols-1"
       )}
     >
@@ -189,7 +189,7 @@ export function InteractiveFileTree() {
          ========================================================================= */}
       <div
         className={cn(
-          "border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/30 flex-col h-full min-w-0",
+          "border-r border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/30 flex-col h-full min-w-0 overflow-hidden",
           mobileView === "tree"
             ? "flex flex-1"
             : sidebarOpen
@@ -199,27 +199,27 @@ export function InteractiveFileTree() {
       >
         {/* File tree top header */}
         <div className="flex items-center justify-between px-3 py-2.5 border-b border-zinc-200 dark:border-zinc-800 bg-zinc-100/70 dark:bg-zinc-900/60 text-xs font-semibold text-zinc-700 dark:text-zinc-300 shrink-0 select-none">
-          <div className="flex items-center gap-2 truncate">
+          <div className="flex items-center gap-2 truncate min-w-0">
             <HugeiconsIcon icon={Folder02Icon} size={15} className="text-sky-500 shrink-0" />
-            <span className="truncate">Component Files</span>
+            <span className="truncate font-medium">Component Files</span>
           </div>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-zinc-200/70 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-zinc-200/70 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 shrink-0 ml-1">
             {HERO_FILES.length}
           </span>
         </div>
 
         {/* File tree scrollable list */}
-        <ScrollArea className="flex-1 p-2">
-          <div className="space-y-1">
+        <ScrollArea className="flex-1 p-2 overflow-x-hidden">
+          <div className="space-y-1 min-w-0">
             {folders.map(([folderName, filesInFolder]) => {
               const isOpen = openFolders[folderName] ?? true;
               return (
-                <div key={folderName} className="space-y-0.5">
+                <div key={folderName} className="space-y-0.5 min-w-0">
                   {/* Folder Row */}
                   <button
                     type="button"
                     onClick={() => toggleFolder(folderName)}
-                    className="w-full flex items-center gap-1.5 px-2 py-1.5 rounded-md text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/60 transition-colors cursor-pointer select-none text-left"
+                    className="w-full flex items-center gap-1.5 px-2 py-1.5 rounded-md text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/60 transition-colors cursor-pointer select-none text-left min-w-0"
                   >
                     <HugeiconsIcon
                       icon={isOpen ? ArrowDown01Icon : ArrowRight01Icon}
@@ -231,21 +231,22 @@ export function InteractiveFileTree() {
                       size={14}
                       className="text-sky-500 shrink-0"
                     />
-                    <span className="truncate">{folderName}</span>
+                    <span className="truncate min-w-0 flex-1">{folderName}</span>
                   </button>
 
                   {/* Files inside Folder */}
                   {isOpen && (
-                    <div className="pl-3 space-y-0.5 border-l border-zinc-200 dark:border-zinc-800 ml-3.5 my-0.5">
+                    <div className="pl-2 space-y-0.5 border-l border-zinc-200 dark:border-zinc-800 ml-2.5 my-0.5 min-w-0">
                       {filesInFolder.map((file) => {
                         const isActive = file.id === activeFileId;
                         return (
                           <button
                             key={file.id}
                             type="button"
+                            title={file.name}
                             onClick={() => handleSelectFile(file.id)}
                             className={cn(
-                              "w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-xs transition-colors cursor-pointer text-left",
+                              "w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-xs transition-colors cursor-pointer text-left min-w-0",
                               isActive
                                 ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950 font-medium shadow-xs"
                                 : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-100"
@@ -259,10 +260,10 @@ export function InteractiveFileTree() {
                                 isActive ? "text-white dark:text-zinc-950" : "text-zinc-400"
                               )}
                             />
-                            <span className="truncate flex-1">{file.name}</span>
+                            <span className="truncate min-w-0 flex-1">{file.name}</span>
                             <span
                               className={cn(
-                                "text-[9px] uppercase font-mono px-1 rounded",
+                                "text-[9px] uppercase font-mono px-1 rounded shrink-0",
                                 isActive
                                   ? "text-zinc-400 dark:text-zinc-600"
                                   : "text-zinc-400"
