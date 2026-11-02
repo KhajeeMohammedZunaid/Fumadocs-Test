@@ -4,9 +4,14 @@ import type { NextConfig } from "next";
 const withMDX = createMDX();
 
 const nextConfig: NextConfig = {
+  // REMOVED THE PORT NUMBER ':3000'
+  allowedDevOrigins: [
+    '192.168.0.114'
+  ],
   /* config options here */
   experimental: {
     agentFeedback: true,
+    
     optimizePackageImports: [
       "lucide-react",
       "@hugeicons/react",
