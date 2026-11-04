@@ -172,12 +172,12 @@ export function UniversalFileTree({
         )}
       >
         {/* File tree top header */}
-        <div className="flex items-center justify-between px-3 py-2.5 border-b border-white/[0.08] bg-[#161616] text-xs font-semibold text-zinc-300 shrink-0 select-none">
+        <div className="flex items-center justify-between px-3 h-10 border-b border-white/[0.08] bg-[#161616] text-xs font-semibold text-zinc-300 shrink-0 select-none box-border">
           <div className="flex items-center gap-2 truncate min-w-0">
             <HugeiconsIcon icon={Folder02Icon} size={15} className="text-sky-500 shrink-0" />
             <span className="truncate font-medium">{title}</span>
           </div>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-zinc-800 text-zinc-400 shrink-0 ml-1 border border-zinc-700/50">
+          <span className="text-[10px] font-mono h-5 min-w-[20px] px-1.5 flex items-center justify-center rounded-full bg-zinc-800 text-zinc-400 shrink-0 ml-1 border border-zinc-700/50">
             {files.length}
           </span>
         </div>
@@ -210,7 +210,7 @@ export function UniversalFileTree({
 
                   {/* Files inside Folder */}
                   {isOpen && (
-                    <div className="pl-2 space-y-0.5 border-l border-zinc-800 ml-2.5 my-0.5 min-w-0">
+                    <div className="pl-2 space-y-0.5 border-l border-zinc-800 ml-3.5 my-0.5 min-w-0">
                       {filesInFolder.map((file) => {
                         const isActive = file.id === activeFileId;
                         return (
@@ -271,7 +271,7 @@ export function UniversalFileTree({
         )}
       >
         {/* Code Viewer Top Bar */}
-        <div className="flex items-center justify-between border-b border-white/[0.08] px-3 py-2 bg-[#161616] shrink-0 select-none gap-2">
+        <div className="flex items-center justify-between border-b border-white/[0.08] px-3 h-10 bg-[#161616] shrink-0 select-none gap-2 box-border">
           {/* Left Controls */}
           <div className="flex items-center gap-2 min-w-0 flex-1">
             {/* Desktop Sidebar Toggle Button */}
@@ -279,7 +279,7 @@ export function UniversalFileTree({
               type="button"
               onClick={() => setSidebarOpen((prev) => !prev)}
               title={sidebarOpen ? "Hide File Tree" : "Show File Tree"}
-              className="hidden lg:flex items-center justify-center p-1.5 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
+              className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
             >
               <HugeiconsIcon icon={SidebarLeft01Icon} size={15} />
             </button>
@@ -288,7 +288,7 @@ export function UniversalFileTree({
             <button
               type="button"
               onClick={() => setMobileView("tree")}
-              className="flex lg:hidden items-center gap-1.5 text-xs text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-2 py-1 rounded-md shrink-0 cursor-pointer border border-zinc-700/60 transition-colors"
+              className="flex lg:hidden items-center gap-1.5 text-xs text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 h-7 px-2 rounded-md shrink-0 cursor-pointer border border-zinc-700/60 transition-colors"
             >
               <HugeiconsIcon icon={Folder02Icon} size={13} className="text-sky-400" />
               <span>Tree</span>
@@ -306,7 +306,7 @@ export function UniversalFileTree({
             {/* Mobile / Narrow Screen: Dropdown File Selector */}
             <div className="flex lg:hidden">
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center justify-between gap-2 px-2.5 py-1 rounded-md bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-200 border border-zinc-700 transition-colors cursor-pointer max-w-[200px] truncate shadow-xs">
+                <DropdownMenuTrigger className="flex items-center justify-between gap-2 px-2.5 h-7 rounded-md bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-200 border border-zinc-700 transition-colors cursor-pointer max-w-[200px] truncate shadow-xs">
                   <div className="flex items-center gap-1.5 truncate">
                     <HugeiconsIcon icon={File01Icon} size={13} className="text-zinc-400 shrink-0" />
                     <span className="truncate">{activeFile?.name}</span>
@@ -356,7 +356,7 @@ export function UniversalFileTree({
             <button
               type="button"
               onClick={handleCopy}
-              className="flex items-center gap-1.5 text-xs text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 px-2.5 py-1 rounded-md transition-colors cursor-pointer border border-zinc-700/80 shadow-xs"
+              className="flex items-center gap-1.5 text-xs text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 h-7 px-2.5 rounded-md transition-colors cursor-pointer border border-zinc-700/80 shadow-xs"
             >
               <HugeiconsIcon
                 icon={copied ? Tick01Icon : Copy01Icon}

@@ -9,17 +9,22 @@ function ScrollArea({
   children,
   ...props
 }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
+  const isScrollFade = className ? /\bscroll-fade\b/.test(className) : false;
+  const rootClassName = isScrollFade
+    ? className?.replace(/\bscroll-fade\b/g, "").trim()
+    : className;
+
   return (
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"
-      className={cn("relative overflow-hidden", className)}
+      className={cn("relative overflow-hidden", rootClassName)}
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
         data-slot="scroll-area-viewport"
         className={cn(
           "h-full w-full rounded-[inherit] [&>div]:!block [&>div]:min-w-0",
-          className?.includes("scroll-fade") && "scroll-fade"
+          isScrollFade && "scroll-fade"
         )}
       >
         {children}

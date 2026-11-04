@@ -23,7 +23,7 @@ const docsContainerProps = {
     gridTemplate: `"sidebar sidebar header toc toc"
 "sidebar sidebar toc-popover toc toc"
 "sidebar sidebar tabs toc toc"
-"sidebar sidebar main toc toc" 1fr / 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 210px) 0px`,
+"sidebar sidebar main toc toc" 1fr / 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 220px) 1.75rem`,
   },
 };
 

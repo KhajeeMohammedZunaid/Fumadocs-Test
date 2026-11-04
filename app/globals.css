@@ -237,25 +237,25 @@
 /* =========================================================================
    Fumadocs Documentation Layout Optimization:
    - Sidebar always open and docked on desktop (collapsible: false)
-   - Right-side gap completely minimized: TOC docked right against the edge
+   - Right-side gap balanced with elegant, spacious breathing room (1.75rem / 28px)
    - Fluid middle content expanding to 100% available viewport width
    ========================================================================= */
 :root {
   --fd-layout-width: 100% !important;
-  --fd-toc-width: 210px !important;
+  --fd-toc-width: 220px !important;
   --fd-sidebar-width: 268px !important;
 }
 
 #nd-docs-layout {
   --fd-layout-width: 100% !important;
-  --fd-toc-width: 210px !important;
+  --fd-toc-width: 220px !important;
   --fd-sidebar-width: 268px !important;
   grid-template:
     "sidebar sidebar header toc toc" var(--fd-docs-row-2)
     "sidebar sidebar toc-popover toc toc" var(--fd-toc-popover-height)
     "sidebar sidebar tabs toc toc" auto
-    "sidebar sidebar main toc toc" 1fr / 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 210px) 0px !important;
-  grid-template-columns: 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 210px) 0px !important;
+    "sidebar sidebar main toc toc" 1fr / 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 220px) 1.75rem !important;
+  grid-template-columns: 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 220px) 1.75rem !important;
 }
 
 [data-layout-main] {
@@ -268,14 +268,14 @@
   width: 100% !important;
 }
 
-/* Dock Table of Contents snugly to the right edge with minimal 0.75rem (12px) gap */
+/* Dock Table of Contents with elegant, spacious right-side breathing room */
 #nd-toc {
-  width: var(--fd-toc-width, 210px) !important;
-  max-width: var(--fd-toc-width, 210px) !important;
-  justify-self: end !important;
-  margin-right: 0 !important;
-  margin-left: auto !important;
-  padding-right: 0.75rem !important;
+  width: var(--fd-toc-width, 220px) !important;
+  max-width: var(--fd-toc-width, 220px) !important;
+  justify-self: start !important;
+  margin-right: auto !important;
+  margin-left: 0 !important;
+  padding-right: 1rem !important;
   padding-left: 0.5rem !important;
 }
 
@@ -284,95 +284,6 @@
   #nd-docs-layout {
     --fd-sidebar-col: var(--fd-sidebar-width, 268px) !important;
   }
-}
-
-/* =========================================================================
-   Shadcn scroll-fade utilities & Left Sidebar Persistent Scrollbar
-   ========================================================================= */
-@utility scroll-fade {
-  --scroll-fade-size: 2rem;
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black var(--scroll-fade-size),
-    black calc(100% - var(--scroll-fade-size)),
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black var(--scroll-fade-size),
-    black calc(100% - var(--scroll-fade-size)),
-    transparent 100%
-  );
-}
-
-@utility scroll-fade-y {
-  --scroll-fade-size: 2rem;
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black var(--scroll-fade-size),
-    black calc(100% - var(--scroll-fade-size)),
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black var(--scroll-fade-size),
-    black calc(100% - var(--scroll-fade-size)),
-    transparent 100%
-  );
-}
-
-@utility scroll-fade-b {
-  --scroll-fade-size: 2rem;
-  mask-image: linear-gradient(
-    to bottom,
-    black 0,
-    black calc(100% - var(--scroll-fade-size)),
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    black 0,
-    black calc(100% - var(--scroll-fade-size)),
-    transparent 100%
-  );
-}
-
-@utility scroll-fade-t {
-  --scroll-fade-size: 2rem;
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black var(--scroll-fade-size),
-    black 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black var(--scroll-fade-size),
-    black 100%
-  );
-}
-
-@utility scroll-fade-x {
-  --scroll-fade-size: 2rem;
-  mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black var(--scroll-fade-size),
-    black calc(100% - var(--scroll-fade-size)),
-    transparent 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0,
-    black var(--scroll-fade-size),
-    black calc(100% - var(--scroll-fade-size)),
-    transparent 100%
-  );
 }
 
 /* Ensure the left documentation sidebar displays its scrollfade mask and persistent scrollbar */
@@ -424,31 +335,6 @@ aside [data-radix-scroll-area-scrollbar][data-state="hidden"] [data-radix-scroll
 #nd-sidebar [data-radix-scroll-area-thumb]:hover,
 aside [data-radix-scroll-area-thumb]:hover {
   opacity: 1 !important;
-}
-
-/* Ensure shadcn scroll-fade applies to viewport without masking scrollbars */
-[data-slot="scroll-area"].scroll-fade {
-  mask-image: none !important;
-  -webkit-mask-image: none !important;
-}
-
-[data-slot="scroll-area"].scroll-fade > [data-slot="scroll-area-viewport"],
-[data-slot="scroll-area-viewport"].scroll-fade {
-  --scroll-fade-size: 2rem;
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black var(--scroll-fade-size),
-    black calc(100% - var(--scroll-fade-size)),
-    transparent 100%
-  ) !important;
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0,
-    black var(--scroll-fade-size),
-    black calc(100% - var(--scroll-fade-size)),
-    transparent 100%
-  ) !important;
 }
 
 
