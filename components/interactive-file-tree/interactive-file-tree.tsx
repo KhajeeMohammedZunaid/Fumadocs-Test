@@ -26,6 +26,8 @@ import {
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { React as ReactLogo } from "@/components/logos/react";
+import { TailwindCSS as TailwindLogo } from "@/components/logos/tailwind";
 import type { FileItem, InteractiveFileTreeProps } from "./types";
 
 const CODE_BG = "#161616";
@@ -59,6 +61,29 @@ function getSyntaxLanguage(fileName: string): string {
   if (fileName.endsWith(".json")) return "json";
   if (fileName.endsWith(".html")) return "html";
   return "javascript";
+}
+
+function FileTypeIcon({
+  fileName,
+  className,
+}: {
+  fileName: string;
+  className?: string;
+}) {
+  const lower = fileName.toLowerCase();
+  if (lower.endsWith(".tsx") || lower.endsWith(".jsx")) {
+    return <ReactLogo className={cn("size-3.5 shrink-0", className)} />;
+  }
+  if (lower.endsWith(".css")) {
+    return <TailwindLogo className={cn("size-3.5 shrink-0", className)} />;
+  }
+  return (
+    <HugeiconsIcon
+      icon={File01Icon}
+      size={13}
+      className={cn("text-zinc-500 shrink-0", className)}
+    />
+  );
 }
 
 export function UniversalFileTree({
@@ -215,14 +240,7 @@ export function UniversalFileTree({
                             : "text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100"
                         )}
                       >
-                        <HugeiconsIcon
-                          icon={File01Icon}
-                          size={13}
-                          className={cn(
-                            "shrink-0",
-                            isActive ? "text-white" : "text-zinc-500"
-                          )}
-                        />
+                        <FileTypeIcon fileName={file.name} />
                         <span className="truncate min-w-0 flex-1 font-medium">{file.name}</span>
                       </button>
                     );
@@ -329,7 +347,7 @@ export function UniversalFileTree({
             {/* Desktop: Clean File Indicator */}
             {activeFile && (
               <div className="hidden lg:flex items-center gap-2 text-xs text-zinc-300 truncate">
-                <HugeiconsIcon icon={File01Icon} size={14} className="text-zinc-400 shrink-0" />
+                <FileTypeIcon fileName={activeFile.name} />
                 <span className="font-medium text-zinc-200">{activeFile.name}</span>
                 <span className="text-zinc-500 text-[11px] hidden xl:inline">({activeFile.path})</span>
               </div>
@@ -340,7 +358,7 @@ export function UniversalFileTree({
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex items-center justify-between gap-2 px-2.5 h-7 rounded-md bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-200 border border-zinc-700 transition-colors cursor-pointer max-w-[200px] truncate shadow-xs">
                   <div className="flex items-center gap-1.5 truncate">
-                    <HugeiconsIcon icon={File01Icon} size={13} className="text-zinc-400 shrink-0" />
+                    {activeFile && <FileTypeIcon fileName={activeFile.name} />}
                     <span className="truncate">{activeFile?.name}</span>
                   </div>
                   <HugeiconsIcon icon={ArrowDown01Icon} size={12} className="text-zinc-400 shrink-0" />
@@ -370,7 +388,7 @@ export function UniversalFileTree({
                             )}
                           >
                             <div className="flex items-center gap-2 truncate">
-                              <HugeiconsIcon icon={File01Icon} size={12} className="text-zinc-400 shrink-0" />
+                              <FileTypeIcon fileName={file.name} />
                               <span className="truncate">{file.name}</span>
                             </div>
                           </DropdownMenuItem>
