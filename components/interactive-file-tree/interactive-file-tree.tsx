@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import vscDarkPlus from "react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -145,110 +146,137 @@ export function UniversalFileTree({
 
   const heightStyle = typeof height === "number" ? `${height}px` : height;
 
+  const renderTreeHeader = () => (
+    <div className="flex items-center justify-between px-3 h-10 border-b border-white/[0.08] bg-[#161616] text-xs font-semibold text-zinc-300 shrink-0 select-none box-border">
+      <div className="flex items-center gap-2 truncate min-w-0">
+        <HugeiconsIcon icon={Folder02Icon} size={15} className="text-sky-500 shrink-0" />
+        <span className="truncate font-medium">{title}</span>
+      </div>
+      <span className="text-[10px] font-mono h-5 min-w-[20px] px-1.5 flex items-center justify-center rounded-full bg-zinc-800 text-zinc-400 shrink-0 ml-1 border border-zinc-700/50">
+        {files.length}
+      </span>
+    </div>
+  );
+
+  const renderFolderList = () => (
+    <div className="space-y-1 min-w-0">
+      {folders.map(([folderName, filesInFolder]) => {
+        const isOpen = openFolders[folderName] ?? true;
+        return (
+          <div key={folderName} className="space-y-0.5 min-w-0">
+            {/* Folder Row */}
+            <button
+              type="button"
+              onClick={() => toggleFolder(folderName)}
+              className="w-full flex items-center gap-1.5 px-2 py-1.5 rounded-md text-xs font-medium text-zinc-300 hover:bg-zinc-800/60 hover:text-white transition-colors cursor-pointer select-none text-left min-w-0"
+            >
+              <motion.span
+                animate={{ rotate: isOpen ? 90 : 0 }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="inline-flex shrink-0 items-center justify-center"
+              >
+                <HugeiconsIcon
+                  icon={ArrowRight01Icon}
+                  size={12}
+                  className="text-zinc-400 shrink-0"
+                />
+              </motion.span>
+              <HugeiconsIcon
+                icon={isOpen ? Folder02Icon : Folder01Icon}
+                size={14}
+                className="text-sky-500 shrink-0"
+              />
+              <span className="truncate min-w-0 flex-1">{folderName}</span>
+            </button>
+
+            {/* Files inside Folder with smooth accordion */}
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  key={`folder-${folderName}`}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  className="overflow-hidden pl-2 space-y-0.5 border-l border-zinc-800 ml-3.5 my-0.5 min-w-0"
+                >
+                  {filesInFolder.map((file) => {
+                    const isActive = file.id === activeFileId;
+                    return (
+                      <button
+                        key={file.id}
+                        type="button"
+                        title={file.name}
+                        onClick={() => handleSelectFile(file.id)}
+                        className={cn(
+                          "w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-xs transition-colors cursor-pointer text-left min-w-0",
+                          isActive
+                            ? "bg-zinc-800 text-white font-medium shadow-xs"
+                            : "text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100"
+                        )}
+                      >
+                        <HugeiconsIcon
+                          icon={File01Icon}
+                          size={13}
+                          className={cn(
+                            "shrink-0",
+                            isActive ? "text-white" : "text-zinc-500"
+                          )}
+                        />
+                        <span className="truncate min-w-0 flex-1 font-medium">{file.name}</span>
+                      </button>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        );
+      })}
+    </div>
+  );
+
   return (
     <div
       style={{ height: heightStyle }}
       className={cn(
-        "my-6 rounded-xl border border-white/[0.08] bg-[#161616] overflow-hidden shadow-sm not-prose flex flex-col transition-all duration-300 ease-in-out",
-        sidebarOpen
-          ? "lg:grid lg:grid-cols-[250px_1fr]"
-          : "lg:grid lg:grid-cols-1",
+        "my-6 rounded-xl border border-white/[0.08] bg-[#161616] overflow-hidden shadow-sm not-prose flex flex-col lg:flex-row relative",
         className
       )}
     >
       {/* =========================================================================
-          LEFT PANEL: File Tree (visible on lg: when sidebarOpen is true, 
-          OR on mobile when mobileView === 'tree')
-          Both left tree and code block share the same bg-[#161616]
+          DESKTOP LEFT PANEL: Animated File Tree via motion/react
          ========================================================================= */}
-      <div
-        className={cn(
-          "border-r border-white/[0.08] bg-[#161616] flex-col h-full min-w-0 overflow-hidden",
-          mobileView === "tree"
-            ? "flex flex-1"
-            : sidebarOpen
-            ? "hidden lg:flex"
-            : "hidden"
+      <AnimatePresence initial={false}>
+        {sidebarOpen && (
+          <motion.div
+            key="desktop-file-tree"
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 250, opacity: 1 }}
+            exit={{ width: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="hidden lg:flex flex-col h-full shrink-0 border-r border-white/[0.08] bg-[#161616] overflow-hidden"
+          >
+            <div className="w-[250px] min-w-[250px] flex flex-col h-full">
+              {renderTreeHeader()}
+              <ScrollArea className="flex-1 p-2 overflow-x-hidden bg-[#161616] scroll-fade">
+                {renderFolderList()}
+              </ScrollArea>
+            </div>
+          </motion.div>
         )}
-      >
-        {/* File tree top header */}
-        <div className="flex items-center justify-between px-3 h-10 border-b border-white/[0.08] bg-[#161616] text-xs font-semibold text-zinc-300 shrink-0 select-none box-border">
-          <div className="flex items-center gap-2 truncate min-w-0">
-            <HugeiconsIcon icon={Folder02Icon} size={15} className="text-sky-500 shrink-0" />
-            <span className="truncate font-medium">{title}</span>
-          </div>
-          <span className="text-[10px] font-mono h-5 min-w-[20px] px-1.5 flex items-center justify-center rounded-full bg-zinc-800 text-zinc-400 shrink-0 ml-1 border border-zinc-700/50">
-            {files.length}
-          </span>
-        </div>
+      </AnimatePresence>
 
-        {/* File tree scrollable list */}
-        <ScrollArea className="flex-1 p-2 overflow-x-hidden bg-[#161616] scroll-fade">
-          <div className="space-y-1 min-w-0">
-            {folders.map(([folderName, filesInFolder]) => {
-              const isOpen = openFolders[folderName] ?? true;
-              return (
-                <div key={folderName} className="space-y-0.5 min-w-0">
-                  {/* Folder Row */}
-                  <button
-                    type="button"
-                    onClick={() => toggleFolder(folderName)}
-                    className="w-full flex items-center gap-1.5 px-2 py-1.5 rounded-md text-xs font-medium text-zinc-300 hover:bg-zinc-800/60 hover:text-white transition-colors cursor-pointer select-none text-left min-w-0"
-                  >
-                    <HugeiconsIcon
-                      icon={isOpen ? ArrowDown01Icon : ArrowRight01Icon}
-                      size={12}
-                      className="text-zinc-400 shrink-0"
-                    />
-                    <HugeiconsIcon
-                      icon={isOpen ? Folder02Icon : Folder01Icon}
-                      size={14}
-                      className="text-sky-500 shrink-0"
-                    />
-                    <span className="truncate min-w-0 flex-1">{folderName}</span>
-                  </button>
-
-                  {/* Files inside Folder */}
-                  {isOpen && (
-                    <div className="pl-2 space-y-0.5 border-l border-zinc-800 ml-3.5 my-0.5 min-w-0">
-                      {filesInFolder.map((file) => {
-                        const isActive = file.id === activeFileId;
-                        return (
-                          <button
-                            key={file.id}
-                            type="button"
-                            title={file.name}
-                            onClick={() => handleSelectFile(file.id)}
-                            className={cn(
-                              "w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-xs transition-colors cursor-pointer text-left min-w-0",
-                              isActive
-                                ? "bg-zinc-800 text-white font-medium shadow-xs"
-                                : "text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100"
-                            )}
-                          >
-                            <HugeiconsIcon
-                              icon={File01Icon}
-                              size={13}
-                              className={cn(
-                                "shrink-0",
-                                isActive ? "text-white" : "text-zinc-500"
-                              )}
-                            />
-                            <span className="truncate min-w-0 flex-1 font-medium">{file.name}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </ScrollArea>
-
-        {/* Mobile footer to return directly to code */}
-        {mobileView === "tree" && (
-          <div className="lg:hidden p-2 border-t border-white/[0.08] bg-[#161616]">
+      {/* =========================================================================
+          MOBILE VIEW: Tree Panel (visible on mobile when mobileView === 'tree')
+         ========================================================================= */}
+      {mobileView === "tree" && (
+        <div className="flex lg:hidden flex-col flex-1 h-full min-w-0 overflow-hidden bg-[#161616]">
+          {renderTreeHeader()}
+          <ScrollArea className="flex-1 p-2 overflow-x-hidden bg-[#161616] scroll-fade">
+            {renderFolderList()}
+          </ScrollArea>
+          <div className="p-2 border-t border-white/[0.08] bg-[#161616]">
             <button
               type="button"
               onClick={() => setMobileView("code")}
@@ -257,8 +285,8 @@ export function UniversalFileTree({
               Back to Code View ({activeFile?.name})
             </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* =========================================================================
           RIGHT PANEL: Code Syntax Highlighter & Viewer
@@ -266,8 +294,8 @@ export function UniversalFileTree({
          ========================================================================= */}
       <div
         className={cn(
-          "flex-col h-full min-w-0 bg-[#161616] overflow-hidden",
-          mobileView === "code" ? "flex flex-1" : "hidden lg:flex"
+          "flex-col h-full min-w-0 bg-[#161616] overflow-hidden flex-1",
+          mobileView === "code" ? "flex" : "hidden lg:flex"
         )}
       >
         {/* Code Viewer Top Bar */}
@@ -281,7 +309,11 @@ export function UniversalFileTree({
               title={sidebarOpen ? "Hide File Tree" : "Show File Tree"}
               className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer"
             >
-              <HugeiconsIcon icon={SidebarLeft01Icon} size={15} />
+              <HugeiconsIcon
+                icon={SidebarLeft01Icon}
+                size={15}
+                className={cn("transition-colors", sidebarOpen ? "text-zinc-200" : "text-zinc-500")}
+              />
             </button>
 
             {/* Mobile / Narrow Screen: Browse Tree button */}
