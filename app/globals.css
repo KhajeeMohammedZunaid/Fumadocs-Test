@@ -240,14 +240,22 @@
    - Right-side gap completely minimized: TOC docked right against the edge
    - Fluid middle content expanding to 100% available viewport width
    ========================================================================= */
-#nd-docs-layout {
+:root {
+  --fd-layout-width: 100% !important;
   --fd-toc-width: 210px !important;
+  --fd-sidebar-width: 268px !important;
+}
+
+#nd-docs-layout {
+  --fd-layout-width: 100% !important;
+  --fd-toc-width: 210px !important;
+  --fd-sidebar-width: 268px !important;
   grid-template:
-    "sidebar sidebar header toc" var(--fd-docs-row-2)
-    "sidebar sidebar toc-popover toc" var(--fd-toc-popover-height)
-    "sidebar sidebar tabs toc" auto
-    "sidebar sidebar main toc" 1fr / 0px var(--fd-sidebar-width, 268px) minmax(0, 1fr) var(--fd-toc-width) !important;
-  grid-template-columns: 0px var(--fd-sidebar-width, 268px) minmax(0, 1fr) var(--fd-toc-width) !important;
+    "sidebar sidebar header toc toc" var(--fd-docs-row-2)
+    "sidebar sidebar toc-popover toc toc" var(--fd-toc-popover-height)
+    "sidebar sidebar tabs toc toc" auto
+    "sidebar sidebar main toc toc" 1fr / 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 210px) 0px !important;
+  grid-template-columns: 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 210px) 0px !important;
 }
 
 [data-layout-main] {
@@ -263,7 +271,10 @@
 /* Dock Table of Contents snugly to the right edge with minimal 0.75rem (12px) gap */
 #nd-toc {
   width: var(--fd-toc-width, 210px) !important;
+  max-width: var(--fd-toc-width, 210px) !important;
+  justify-self: end !important;
   margin-right: 0 !important;
+  margin-left: auto !important;
   padding-right: 0.75rem !important;
   padding-left: 0.5rem !important;
 }
@@ -366,6 +377,7 @@
 
 /* Ensure the left documentation sidebar displays its scrollfade mask and persistent scrollbar */
 #nd-sidebar [data-radix-scroll-area-viewport],
+aside#nd-sidebar [data-radix-scroll-area-viewport],
 aside [data-radix-scroll-area-viewport] {
   mask-image: linear-gradient(
     to bottom,
@@ -384,19 +396,27 @@ aside [data-radix-scroll-area-viewport] {
 }
 
 #nd-sidebar [data-radix-scroll-area-scrollbar],
-aside [data-radix-scroll-area-scrollbar] {
+aside#nd-sidebar [data-radix-scroll-area-scrollbar],
+aside [data-radix-scroll-area-scrollbar],
+#nd-sidebar [data-radix-scroll-area-scrollbar][data-state="hidden"],
+aside [data-radix-scroll-area-scrollbar][data-state="hidden"] {
   opacity: 1 !important;
   visibility: visible !important;
   display: flex !important;
   pointer-events: auto !important;
+  width: 6px !important;
 }
 
 #nd-sidebar [data-radix-scroll-area-thumb],
-aside [data-radix-scroll-area-thumb] {
+aside#nd-sidebar [data-radix-scroll-area-thumb],
+aside [data-radix-scroll-area-thumb],
+#nd-sidebar [data-radix-scroll-area-scrollbar][data-state="hidden"] [data-radix-scroll-area-thumb],
+aside [data-radix-scroll-area-scrollbar][data-state="hidden"] [data-radix-scroll-area-thumb] {
   visibility: visible !important;
   display: block !important;
-  opacity: 0.6 !important;
+  opacity: 0.5 !important;
   min-height: 48px !important;
+  height: 64px !important;
   background-color: var(--muted-foreground, #71717a) !important;
   border-radius: 9999px !important;
 }
@@ -404,6 +424,31 @@ aside [data-radix-scroll-area-thumb] {
 #nd-sidebar [data-radix-scroll-area-thumb]:hover,
 aside [data-radix-scroll-area-thumb]:hover {
   opacity: 1 !important;
+}
+
+/* Ensure shadcn scroll-fade applies to viewport without masking scrollbars */
+[data-slot="scroll-area"].scroll-fade {
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+[data-slot="scroll-area"].scroll-fade > [data-slot="scroll-area-viewport"],
+[data-slot="scroll-area-viewport"].scroll-fade {
+  --scroll-fade-size: 2rem;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black var(--scroll-fade-size),
+    black calc(100% - var(--scroll-fade-size)),
+    transparent 100%
+  ) !important;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black var(--scroll-fade-size),
+    black calc(100% - var(--scroll-fade-size)),
+    transparent 100%
+  ) !important;
 }
 
 

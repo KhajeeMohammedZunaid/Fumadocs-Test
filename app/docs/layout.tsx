@@ -20,10 +20,10 @@ const sidebarConfig = {
 
 const docsContainerProps = {
   style: {
-    gridTemplate: `"sidebar sidebar header toc"
-"sidebar sidebar toc-popover toc"
-"sidebar sidebar tabs toc"
-"sidebar sidebar main toc" 1fr / 0px var(--fd-sidebar-width) minmax(0, 1fr) var(--fd-toc-width, 210px)`,
+    gridTemplate: `"sidebar sidebar header toc toc"
+"sidebar sidebar toc-popover toc toc"
+"sidebar sidebar tabs toc toc"
+"sidebar sidebar main toc toc" 1fr / 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 210px) 0px`,
   },
 };
 
