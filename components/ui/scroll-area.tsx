@@ -17,7 +17,10 @@ function ScrollArea({
     >
       <ScrollAreaPrimitive.Viewport
         data-slot="scroll-area-viewport"
-        className="h-full w-full rounded-[inherit] [&>div]:!block [&>div]:min-w-0"
+        className={cn(
+          "h-full w-full rounded-[inherit] [&>div]:!block [&>div]:min-w-0",
+          className?.includes("scroll-fade") && "scroll-fade"
+        )}
       >
         {children}
       </ScrollAreaPrimitive.Viewport>
