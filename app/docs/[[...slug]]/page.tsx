@@ -9,11 +9,15 @@ import { notFound } from "next/navigation";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 import { Files, Folder, File } from "fumadocs-ui/components/files";
-import { HeroPreviewFrame } from "@/components/hero-preview-frame";
-import { InteractiveFileTree } from "@/components/interactive-file-tree";
-import { StuxButton } from "@/components/buttons/stux-button";
-import { StuxButtonStudio } from "@/components/stux-button-studio";
-import { StuxButtonCodeViewer } from "@/components/stux-button-code-viewer";
+import {
+  HeroPreviewFrame,
+  InteractiveFileTree,
+} from "@/components/hero-sections";
+import {
+  StuxButton,
+  StuxButtonStudio,
+  StuxButtonCodeViewer,
+} from "@/components/stux-button";
 
 // Opt dynamic documentation segment out of instant App Shell validation
 // so prerendered SSG pages stream or load directly without Suspense freeze.

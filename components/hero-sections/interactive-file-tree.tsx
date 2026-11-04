@@ -25,7 +25,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
-import { HERO_FILES, type FileItem } from "@/components/hero-code-data";
+import { HERO_FILES, type FileItem } from "@/components/hero-sections/hero-code-data";
 import { cn } from "@/lib/utils";
 
 // Locally served Monaco Editor via static AMD bundle in /monaco/vs (Zero CDN requests, zero Turbopack worker bundling errors)

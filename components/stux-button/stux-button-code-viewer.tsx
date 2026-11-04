@@ -572,7 +572,7 @@ export function StuxButtonCodeViewer() {
       <div className="flex items-center justify-between border-b border-zinc-800/80 px-4 py-2.5 bg-zinc-900/90 backdrop-blur select-none">
         <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
           <HugeiconsIcon icon={File01Icon} size={14} className="text-zinc-400 shrink-0" />
-          <span>components/buttons/stux-button.tsx</span>
+          <span>components/stux-button/stux-button.tsx</span>
         </div>
 
         <div className="flex items-center gap-2">

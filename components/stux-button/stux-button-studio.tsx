@@ -15,7 +15,7 @@ import {
   type StuxButtonSize,
   type StuxButtonVariant,
   type StuxFillPattern,
-} from "@/components/buttons/stux-button";
+} from "./stux-button";
 import { cn } from "@/lib/utils";
 
 // Hoist static option arrays outside component (Vercel best practice: server-hoist-static-io)
