@@ -50,6 +50,93 @@ const MonacoEditor = dynamic<EditorProps>(
   }
 );
 
+const KEYWORDS = new Set([
+  "import", "export", "from", "const", "let", "var", "function", "return",
+  "type", "interface", "extends", "default", "as", "typeof", "new", "if",
+  "else", "switch", "case", "break", "continue", "for", "while", "do",
+  "try", "catch", "finally", "throw", "async", "await", "yield", "class",
+  "true", "false", "null", "undefined", "void", "any", "never", "unknown",
+  "boolean", "string", "number", "object", "symbol", "bigint",
+]);
+
+function highlightLine(line: string, lineIndex: number): React.ReactNode {
+  const trimmed = line.trim();
+  if (trimmed.startsWith("//") || trimmed.startsWith("/*") || trimmed.startsWith("*")) {
+    return (
+      <span key={lineIndex} className="text-zinc-500 italic">
+        {line}
+      </span>
+    );
+  }
+
+  const tokenRegex =
+    /(\/\/.*$)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`)|(\b\d+(?:\.\d+)?\b)|(\b[A-Za-z_$][A-Za-z0-9_$]*\b)|([{}()\[\].,:;=+\-*/%&|^!<>?~]+)|(\s+)/g;
+
+  const elements: React.ReactNode[] = [];
+  let match: RegExpExecArray | null;
+  let key = 0;
+
+  while ((match = tokenRegex.exec(line)) !== null) {
+    const [full, comment, str, num, word, punct, space] = match;
+
+    if (comment) {
+      elements.push(
+        <span key={key++} className="text-zinc-500 italic">
+          {comment}
+        </span>
+      );
+    } else if (str) {
+      elements.push(
+        <span key={key++} className="text-emerald-400 dark:text-emerald-300">
+          {str}
+        </span>
+      );
+    } else if (num) {
+      elements.push(
+        <span key={key++} className="text-amber-400 dark:text-amber-300">
+          {num}
+        </span>
+      );
+    } else if (word) {
+      if (KEYWORDS.has(word)) {
+        elements.push(
+          <span key={key++} className="text-purple-400 dark:text-purple-300 font-medium">
+            {word}
+          </span>
+        );
+      } else if (/^[A-Z][A-Za-z0-9_]*$/.test(word)) {
+        elements.push(
+          <span key={key++} className="text-sky-400 dark:text-sky-300">
+            {word}
+          </span>
+        );
+      } else if (word === "motion") {
+        elements.push(
+          <span key={key++} className="text-cyan-400 dark:text-cyan-300">
+            {word}
+          </span>
+        );
+      } else {
+        elements.push(
+          <span key={key++} className="text-zinc-200">
+            {word}
+          </span>
+        );
+      }
+    } else if (punct) {
+      elements.push(
+        <span key={key++} className="text-zinc-400">
+          {punct}
+        </span>
+      );
+    } else if (space) {
+      elements.push(space);
+    }
+  }
+
+  return <React.Fragment key={lineIndex}>{elements}</React.Fragment>;
+}
+
 function CodeFallback({ code }: { code: string }) {
   const lines = React.useMemo(() => code.split("\n"), [code]);
 
@@ -57,16 +144,22 @@ function CodeFallback({ code }: { code: string }) {
     <ScrollArea className="h-full w-full font-mono text-[13px] leading-relaxed">
       <div className="py-3 px-4 flex min-w-full">
         {/* Line numbers */}
-        <div className="select-none text-zinc-500/50 pr-4 text-right font-mono text-xs shrink-0 border-r border-zinc-800/40 mr-4">
+        <div className="select-none text-zinc-500/50 pr-4 text-right font-mono text-xs shrink-0 border-r border-zinc-800/60 mr-4">
           {lines.map((_, i) => (
-            <div key={i} className="leading-[21px] min-h-[21px]">
+            <div key={i} className="leading-[22px] min-h-[22px]">
               {i + 1}
             </div>
           ))}
         </div>
         {/* Code */}
-        <pre className="flex-1 m-0 p-0 text-zinc-300 font-mono text-[13px] leading-[21px] whitespace-pre select-text overflow-x-auto min-w-0">
-          <code>{code}</code>
+        <pre className="flex-1 m-0 p-0 font-mono text-[13px] leading-[22px] whitespace-pre select-text overflow-x-auto min-w-0">
+          <code>
+            {lines.map((line, i) => (
+              <div key={i} className="min-h-[22px]">
+                {line.length === 0 ? "\u00A0" : highlightLine(line, i)}
+              </div>
+            ))}
+          </code>
         </pre>
       </div>
     </ScrollArea>
@@ -115,41 +208,104 @@ function getMonacoLanguage(fileName: string): string {
   return "plaintext";
 }
 
+// Hoist static file indices outside component (Vercel best practice: server-hoist-static-io, js-index-maps)
+const HERO_FOLDERS = Array.from(
+  HERO_FILES.reduce((map, f) => {
+    if (!map.has(f.folder)) {
+      map.set(f.folder, []);
+    }
+    map.get(f.folder)!.push(f);
+    return map;
+  }, new Map<string, FileItem[]>()).entries()
+);
+
+const FILE_MAP = new Map(HERO_FILES.map((f) => [f.id, f]));
+
+const INITIAL_OPEN_FOLDERS: Record<string, boolean> = {
+  "components/hero-sections": true,
+  "components/ui": true,
+  app: true,
+};
+
 export function InteractiveFileTree() {
   const [activeFileId, setActiveFileId] = React.useState<string>("hero.tsx");
   const [copied, setCopied] = React.useState(false);
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const [mobileView, setMobileView] = React.useState<"code" | "tree">("code");
-  const [openFolders, setOpenFolders] = React.useState<Record<string, boolean>>({
-    "components/hero-sections": true,
-    "components/ui": true,
-    app: true,
-  });
+  const [openFolders, setOpenFolders] = React.useState<Record<string, boolean>>(INITIAL_OPEN_FOLDERS);
 
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const editorRef = React.useRef<any>(null);
+  const isDisposedRef = React.useRef(false);
 
   React.useEffect(() => {
     setMounted(true);
+    isDisposedRef.current = false;
+
+    let rafId: number | null = null;
+    const ro = new ResizeObserver(() => {
+      if (editorRef.current && !isDisposedRef.current) {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+          try {
+            if (!isDisposedRef.current && editorRef.current) {
+              editorRef.current.layout();
+            }
+          } catch {
+            // Ignore
+          }
+        });
+      }
+    });
+
+    if (containerRef.current) {
+      ro.observe(containerRef.current);
+    }
+
+    return () => {
+      isDisposedRef.current = true;
+      if (rafId) cancelAnimationFrame(rafId);
+      ro.disconnect();
+      if (editorRef.current) {
+        try {
+          const view = editorRef.current._view || editorRef.current._modelData?.view;
+          if (view?._renderAnimationFrame) {
+            view._renderAnimationFrame.dispose();
+            view._renderAnimationFrame = null;
+          }
+        } catch {
+          // Ignore
+        }
+      }
+    };
   }, []);
 
-  const activeFile = React.useMemo(() => {
-    return HERO_FILES.find((f) => f.id === activeFileId) || HERO_FILES[0];
-  }, [activeFileId]);
+  const handleEditorMount = React.useCallback((editor: any) => {
+    editorRef.current = editor;
+    try {
+      editor.layout();
+    } catch {
+      // Ignore
+    }
+  }, []);
 
-  const toggleFolder = (folderKey: string) => {
+  const activeFile = FILE_MAP.get(activeFileId) ?? HERO_FILES[0];
+
+  const toggleFolder = React.useCallback((folderKey: string) => {
     setOpenFolders((prev) => ({
       ...prev,
       [folderKey]: !prev[folderKey],
     }));
-  };
+  }, []);
 
-  const handleSelectFile = (fileId: string) => {
+  const handleSelectFile = React.useCallback((fileId: string) => {
     setActiveFileId(fileId);
     setMobileView("code");
-  };
+  }, []);
 
-  const handleCopy = async () => {
+  const handleCopy = React.useCallback(async () => {
     if (!activeFile) return;
     try {
       await navigator.clipboard.writeText(activeFile.code);
@@ -158,19 +314,7 @@ export function InteractiveFileTree() {
     } catch {
       // fallback
     }
-  };
-
-  // Group files by folder
-  const folders = React.useMemo(() => {
-    const map = new Map<string, FileItem[]>();
-    for (const f of HERO_FILES) {
-      if (!map.has(f.folder)) {
-        map.set(f.folder, []);
-      }
-      map.get(f.folder)!.push(f);
-    }
-    return Array.from(map.entries());
-  }, []);
+  }, [activeFile]);
 
   const editorTheme = mounted && resolvedTheme === "light" ? "light" : "vs-dark";
 
@@ -211,7 +355,7 @@ export function InteractiveFileTree() {
         {/* File tree scrollable list */}
         <ScrollArea className="flex-1 p-2 overflow-x-hidden">
           <div className="space-y-1 min-w-0">
-            {folders.map(([folderName, filesInFolder]) => {
+            {HERO_FOLDERS.map(([folderName, filesInFolder]) => {
               const isOpen = openFolders[folderName] ?? true;
               return (
                 <div key={folderName} className="space-y-0.5 min-w-0">
@@ -344,7 +488,7 @@ export function InteractiveFileTree() {
                   Select Component File
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-zinc-800 my-1" />
-                {folders.map(([folderName, filesInFolder]) => (
+                {HERO_FOLDERS.map(([folderName, filesInFolder]) => (
                   <DropdownMenuGroup key={folderName}>
                     <div className="px-2 py-1 text-[11px] font-semibold text-zinc-400 flex items-center gap-1.5">
                       <HugeiconsIcon icon={Folder01Icon} size={12} className="text-sky-400" />
@@ -406,16 +550,16 @@ export function InteractiveFileTree() {
         </div>
 
         {/* Monaco Editor Container */}
-        <div className="flex-1 min-h-0 w-full overflow-hidden relative">
+        <div ref={containerRef} className="flex-1 min-h-0 w-full overflow-hidden relative">
           <EditorErrorBoundary fallback={<CodeFallback code={activeFile.code} />}>
             <MonacoEditor
               height="100%"
               width="100%"
-              path={activeFile.path}
               language={getMonacoLanguage(activeFile.name)}
               value={activeFile.code}
               theme={editorTheme}
               loading={<CodeFallback code={activeFile.code} />}
+              onMount={handleEditorMount}
               options={{
                 readOnly: true,
                 domReadOnly: true,
@@ -424,7 +568,13 @@ export function InteractiveFileTree() {
                 lineNumbers: "on",
                 scrollBeyondLastLine: false,
                 wordWrap: "off",
-                automaticLayout: true,
+                automaticLayout: false,
+                contextmenu: false,
+                renderValidationDecorations: "off",
+                quickSuggestions: false,
+                suggestOnTriggerCharacters: false,
+                parameterHints: { enabled: false },
+                hover: { enabled: "off" },
                 fontFamily: "var(--font-geist-mono), 'Fira Code', 'Courier New', monospace",
                 padding: { top: 12, bottom: 12 },
                 renderLineHighlight: "all",

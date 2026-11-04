@@ -11,28 +11,42 @@ export function Hero() {
   const [startBtnText, setStartBtnText] = React.useState("Start for free");
   const [isBtnBusy, setIsBtnBusy] = React.useState(false);
 
-  const handleStartClick = () => {
+  const timer1Ref = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timer2Ref = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clean up timers on unmount to prevent state updates on unmounted component
+  React.useEffect(() => {
+    return () => {
+      if (timer1Ref.current) clearTimeout(timer1Ref.current);
+      if (timer2Ref.current) clearTimeout(timer2Ref.current);
+    };
+  }, []);
+
+  const handleStartClick = React.useCallback(() => {
     if (isBtnBusy) return;
     setIsBtnBusy(true);
 
     setStartBtnText("Launching workspace…");
 
-    setTimeout(() => {
+    timer1Ref.current = setTimeout(() => {
       setStartBtnText("Workspace ready ✓");
 
-      setTimeout(() => {
+      timer2Ref.current = setTimeout(() => {
         setStartBtnText("Start for free");
         setIsBtnBusy(false);
       }, 2200);
     }, 1200);
-  };
+  }, [isBtnBusy]);
 
-  const handleStartKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === " " || e.key === "Spacebar") {
-      e.preventDefault();
-      handleStartClick();
-    }
-  };
+  const handleStartKeyDown = React.useCallback(
+    (e: React.KeyboardEvent<HTMLButtonElement>) => {
+      if (e.key === " " || e.key === "Spacebar") {
+        e.preventDefault();
+        handleStartClick();
+      }
+    },
+    [handleStartClick]
+  );
 
   return (
     <div className="relative w-full flex-1 min-h-0 bg-[#fafafa] dark:bg-[#09090b] overflow-hidden flex flex-col justify-between">

@@ -11,9 +11,15 @@ export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const mobileBtnRef = React.useRef<HTMLButtonElement>(null);
   const overlayRef = React.useRef<HTMLDivElement>(null);
+  const focusTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   React.useEffect(() => {
     setMounted(true);
+    return () => {
+      // Ensure body scroll lock is always restored on unmount
+      document.body.classList.remove("overflow-hidden");
+      if (focusTimerRef.current) clearTimeout(focusTimerRef.current);
+    };
   }, []);
 
   const toggleTheme = React.useCallback(() => {
@@ -23,7 +29,8 @@ export function Navbar() {
   const openMenu = React.useCallback(() => {
     setIsMenuOpen(true);
     document.body.classList.add("overflow-hidden");
-    setTimeout(() => {
+    if (focusTimerRef.current) clearTimeout(focusTimerRef.current);
+    focusTimerRef.current = setTimeout(() => {
       const firstFocusable = overlayRef.current?.querySelector<HTMLElement>("a, button");
       firstFocusable?.focus();
     }, 60);
@@ -62,7 +69,7 @@ export function Navbar() {
         document.body.classList.remove("overflow-hidden");
       }
     };
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("resize", handleResize, { passive: true });
     return () => window.removeEventListener("resize", handleResize);
   }, [isMenuOpen]);
 

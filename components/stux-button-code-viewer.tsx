@@ -1,9 +1,6 @@
 "use client";
 
 import * as React from "react";
-import dynamic from "next/dynamic";
-import type { EditorProps } from "@monaco-editor/react";
-import { useTheme } from "next-themes";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   File01Icon,
@@ -11,7 +8,6 @@ import {
   Tick01Icon,
 } from "@hugeicons/core-free-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 
 const STUX_BUTTON_CODE = `"use client";
 
@@ -441,42 +437,116 @@ StuxButton.displayName = "StuxButton";
 export default StuxButton;
 `;
 
-const MonacoEditor = dynamic<EditorProps>(
-  () =>
-    import("@monaco-editor/react").then((mod) => {
-      mod.loader.config({
-        paths: {
-          vs: "/monaco/vs",
-        },
-      });
-      const Comp =
-        mod.Editor ||
-        ((mod as any).default?.default
-          ? (mod as any).default.default
-          : mod.default);
-      return { default: Comp };
-    }),
-  {
-    ssr: false,
-    loading: () => null,
-  }
-);
+const KEYWORDS = new Set([
+  "import", "export", "from", "const", "let", "var", "function", "return",
+  "type", "interface", "extends", "default", "as", "typeof", "new", "if",
+  "else", "switch", "case", "break", "continue", "for", "while", "do",
+  "try", "catch", "finally", "throw", "async", "await", "yield", "class",
+  "true", "false", "null", "undefined", "void", "any", "never", "unknown",
+  "boolean", "string", "number", "object", "symbol", "bigint",
+]);
 
-function CodeFallback({ code }: { code: string }) {
+function highlightLine(line: string, lineIndex: number): React.ReactNode {
+  const trimmed = line.trim();
+  if (trimmed.startsWith("//") || trimmed.startsWith("/*") || trimmed.startsWith("*")) {
+    return (
+      <span key={lineIndex} className="text-zinc-500 italic">
+        {line}
+      </span>
+    );
+  }
+
+  const tokenRegex =
+    /(\/\/.*$)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`)|(\b\d+(?:\.\d+)?\b)|(\b[A-Za-z_$][A-Za-z0-9_$]*\b)|([{}()\[\].,:;=+\-*/%&|^!<>?~]+)|(\s+)/g;
+
+  const elements: React.ReactNode[] = [];
+  let match: RegExpExecArray | null;
+  let key = 0;
+
+  while ((match = tokenRegex.exec(line)) !== null) {
+    const [full, comment, str, num, word, punct, space] = match;
+
+    if (comment) {
+      elements.push(
+        <span key={key++} className="text-zinc-500 italic">
+          {comment}
+        </span>
+      );
+    } else if (str) {
+      elements.push(
+        <span key={key++} className="text-emerald-400 dark:text-emerald-300">
+          {str}
+        </span>
+      );
+    } else if (num) {
+      elements.push(
+        <span key={key++} className="text-amber-400 dark:text-amber-300">
+          {num}
+        </span>
+      );
+    } else if (word) {
+      if (KEYWORDS.has(word)) {
+        elements.push(
+          <span key={key++} className="text-purple-400 dark:text-purple-300 font-medium">
+            {word}
+          </span>
+        );
+      } else if (/^[A-Z][A-Za-z0-9_]*$/.test(word)) {
+        elements.push(
+          <span key={key++} className="text-sky-400 dark:text-sky-300">
+            {word}
+          </span>
+        );
+      } else if (word === "motion") {
+        elements.push(
+          <span key={key++} className="text-cyan-400 dark:text-cyan-300">
+            {word}
+          </span>
+        );
+      } else {
+        elements.push(
+          <span key={key++} className="text-zinc-200">
+            {word}
+          </span>
+        );
+      }
+    } else if (punct) {
+      elements.push(
+        <span key={key++} className="text-zinc-400">
+          {punct}
+        </span>
+      );
+    } else if (space) {
+      elements.push(space);
+    }
+  }
+
+  return <React.Fragment key={lineIndex}>{elements}</React.Fragment>;
+}
+
+function SyntaxHighlightedCode({ code }: { code: string }) {
   const lines = React.useMemo(() => code.split("\n"), [code]);
 
   return (
     <ScrollArea className="h-full w-full font-mono text-[13px] leading-relaxed">
       <div className="py-3 px-4 flex min-w-full">
-        <div className="select-none text-zinc-500/50 pr-4 text-right font-mono text-xs shrink-0 border-r border-zinc-800/40 mr-4">
+        {/* Line numbers */}
+        <div className="select-none text-zinc-500/50 pr-4 text-right font-mono text-xs shrink-0 border-r border-zinc-800/60 mr-4">
           {lines.map((_, i) => (
-            <div key={i} className="leading-[21px] min-h-[21px]">
+            <div key={i} className="leading-[22px] min-h-[22px]">
               {i + 1}
             </div>
           ))}
         </div>
-        <pre className="flex-1 m-0 p-0 text-zinc-300 font-mono text-[13px] leading-[21px] whitespace-pre select-text overflow-x-auto min-w-0">
-          <code>{code}</code>
+        {/* Code */}
+        <pre className="flex-1 m-0 p-0 font-mono text-[13px] leading-[22px] whitespace-pre select-text overflow-x-auto min-w-0">
+          <code>
+            {lines.map((line, i) => (
+              <div key={i} className="min-h-[22px]">
+                {line.length === 0 ? "\u00A0" : highlightLine(line, i)}
+              </div>
+            ))}
+          </code>
         </pre>
       </div>
     </ScrollArea>
@@ -485,12 +555,6 @@ function CodeFallback({ code }: { code: string }) {
 
 export function StuxButtonCodeViewer() {
   const [copied, setCopied] = React.useState(false);
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
-
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const handleCopy = async () => {
     try {
@@ -501,8 +565,6 @@ export function StuxButtonCodeViewer() {
       // fallback
     }
   };
-
-  const editorTheme = mounted && resolvedTheme === "light" ? "light" : "vs-dark";
 
   return (
     <div className="my-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-950 dark:bg-black overflow-hidden shadow-sm not-prose flex flex-col h-[520px]">
@@ -532,39 +594,9 @@ export function StuxButtonCodeViewer() {
         </div>
       </div>
 
-      {/* Monaco / Fallback */}
+      {/* Syntax Highlighted Code Viewer */}
       <div className="flex-1 min-h-0 w-full overflow-hidden relative">
-        <MonacoEditor
-          height="100%"
-          width="100%"
-          path="components/buttons/stux-button.tsx"
-          language="typescript"
-          value={STUX_BUTTON_CODE}
-          theme={editorTheme}
-          loading={<CodeFallback code={STUX_BUTTON_CODE} />}
-          options={{
-            readOnly: true,
-            domReadOnly: true,
-            minimap: { enabled: false },
-            fontSize: 12.5,
-            lineNumbers: "on",
-            scrollBeyondLastLine: false,
-            wordWrap: "off",
-            automaticLayout: true,
-            fontFamily: "var(--font-geist-mono), 'Fira Code', 'Courier New', monospace",
-            padding: { top: 12, bottom: 12 },
-            renderLineHighlight: "all",
-            overviewRulerBorder: false,
-            hideCursorInOverviewRuler: true,
-            smoothScrolling: true,
-            scrollbar: {
-              vertical: "visible",
-              horizontal: "visible",
-              verticalScrollbarSize: 8,
-              horizontalScrollbarSize: 8,
-            },
-          }}
-        />
+        <SyntaxHighlightedCode code={STUX_BUTTON_CODE} />
       </div>
     </div>
   );

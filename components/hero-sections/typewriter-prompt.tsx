@@ -15,6 +15,8 @@ const PROMPTS = [
 export function TypewriterPrompt() {
   const shouldReduceMotion = useReducedMotion();
   const inputRef = React.useRef<HTMLInputElement>(null);
+  const submitTimer1Ref = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const submitTimer2Ref = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [promptIndex, setPromptIndex] = React.useState(0);
   const [displayText, setDisplayText] = React.useState(PROMPTS[0]);
@@ -23,6 +25,14 @@ export function TypewriterPrompt() {
   const [inputValue, setInputValue] = React.useState("");
   const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [isBusy, setIsBusy] = React.useState(false);
+
+  // Clear pending submission timers on unmount
+  React.useEffect(() => {
+    return () => {
+      if (submitTimer1Ref.current) clearTimeout(submitTimer1Ref.current);
+      if (submitTimer2Ref.current) clearTimeout(submitTimer2Ref.current);
+    };
+  }, []);
 
   // Caret blinking effect
   React.useEffect(() => {
@@ -81,47 +91,57 @@ export function TypewriterPrompt() {
     return () => clearTimeout(timeoutId);
   }, [isUserTyping, shouldReduceMotion, isBusy, promptIndex]);
 
-  const handleFocus = () => {
+  const handleFocus = React.useCallback(() => {
     setIsUserTyping(true);
-    if (!inputValue) {
-      setInputValue(displayText);
-    }
-  };
+    setInputValue((prev) => (prev ? prev : displayText));
+  }, [displayText]);
 
-  const handleBlur = () => {
-    if (!inputValue.trim()) {
+  const handleBlur = React.useCallback(() => {
+    setInputValue((prev) => {
+      if (!prev.trim()) {
+        setIsUserTyping(false);
+        return "";
+      }
+      return prev;
+    });
+  }, []);
+
+  const handleSubmit = React.useCallback(
+    (e?: React.SyntheticEvent) => {
+      if (e) e.stopPropagation();
+      if (isBusy) return;
+      setIsBusy(true);
+      setIsSubmitted(true);
+
+      const query = inputValue.trim() || "Analyzing metrics across channels";
+      setDisplayText(`${query}…`);
       setIsUserTyping(false);
-      setInputValue("");
-    }
-  };
 
-  const handleSubmit = (e?: React.SyntheticEvent) => {
-    if (e) e.stopPropagation();
-    if (isBusy) return;
-    setIsBusy(true);
-    setIsSubmitted(true);
+      if (submitTimer1Ref.current) clearTimeout(submitTimer1Ref.current);
+      if (submitTimer2Ref.current) clearTimeout(submitTimer2Ref.current);
 
-    const query = inputValue.trim() || "Analyzing metrics across channels";
-    setDisplayText(`${query}…`);
-    setIsUserTyping(false);
+      submitTimer1Ref.current = setTimeout(() => {
+        setIsSubmitted(false);
+        setDisplayText("Report generated successfully ✓");
 
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setDisplayText("Report generated successfully ✓");
-
-      setTimeout(() => {
-        setIsBusy(false);
-        setInputValue("");
+        submitTimer2Ref.current = setTimeout(() => {
+          setIsBusy(false);
+          setInputValue("");
+        }, 2000);
       }, 2000);
-    }, 2000);
-  };
+    },
+    [isBusy, inputValue]
+  );
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  };
+  const handleKeyDown = React.useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSubmit(e);
+      }
+    },
+    [handleSubmit]
+  );
 
   return (
     <div className="animate-enter-4 relative z-10 w-full max-w-[540px] 4k:max-w-[760px] mx-auto px-3 sm:px-4 mb-5 sm:mb-6 4k:mb-8">

@@ -22,6 +22,13 @@ import { cn } from "@/lib/utils";
 
 type DeviceMode = "desktop" | "tablet" | "mobile";
 
+// Hoist static lookup maps to module level (Vercel best practice: server-hoist-static-io, js-index-maps)
+const DEVICE_WIDTH_MAP: Record<DeviceMode, string> = {
+  desktop: "w-full",
+  tablet: "max-w-[768px]",
+  mobile: "max-w-[390px]",
+};
+
 interface HeroPreviewFrameProps {
   src?: string;
   title?: string;
@@ -34,26 +41,13 @@ export function HeroPreviewFrame({
   const [device, setDevice] = React.useState<DeviceMode>("desktop");
   const [key, setKey] = React.useState(0);
 
-  const getWidth = () => {
-    switch (device) {
-      case "mobile":
-        return "max-w-[390px]";
-      case "tablet":
-        return "max-w-[768px]";
-      case "desktop":
-      default:
-        return "w-full";
-    }
-  };
-
   return (
     <div className="my-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/60 dark:bg-zinc-950/60 overflow-hidden shadow-sm not-prose">
       {/* Top Controls Bar */}
       <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 px-4 py-2.5 bg-white dark:bg-zinc-900/80 backdrop-blur">
         {/* Title */}
         <div className="flex items-center gap-2">
-          <span className="size-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+          <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
             {title}
           </span>
         </div>
@@ -181,7 +175,7 @@ export function HeroPreviewFrame({
         <div
           className={cn(
             "w-full transition-all duration-300 ease-in-out mx-auto rounded-lg overflow-hidden border border-zinc-200/80 dark:border-zinc-800 shadow-sm bg-white dark:bg-black",
-            getWidth()
+            DEVICE_WIDTH_MAP[device]
           )}
         >
           <iframe

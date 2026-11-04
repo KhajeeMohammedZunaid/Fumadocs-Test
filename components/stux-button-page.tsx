@@ -13,6 +13,25 @@ import {
 } from "@/components/buttons/stux-button";
 import { cn } from "@/lib/utils";
 
+// Hoist static option arrays outside component (Vercel best practice: server-hoist-static-io)
+const COLOR_OPTIONS: { key: StuxColorScheme; label: string; hex: string }[] = [
+  { key: "yellow", label: "Yellow", hex: "#ffea2f" },
+  { key: "lime", label: "Lime", hex: "#d4ff32" },
+  { key: "cyan", label: "Cyan", hex: "#00f0ff" },
+  { key: "orange", label: "Orange", hex: "#ff5416" },
+  { key: "white", label: "White", hex: "#ffffff" },
+  { key: "violet", label: "Violet", hex: "#a855f7" },
+  { key: "emerald", label: "Emerald", hex: "#10b981" },
+];
+
+const PATTERN_OPTIONS: { key: StuxFillPattern; label: string }[] = [
+  { key: "cross", label: "Cross Cut" },
+  { key: "wave", label: "Liquid Wave" },
+  { key: "cyber", label: "Cyber Chevron" },
+  { key: "arc", label: "Convex Arc" },
+  { key: "zigzag", label: "Sawtooth Blade" },
+];
+
 export default function StuxButtonPage() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
@@ -39,25 +58,9 @@ export default function StuxButtonPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const isDark = mounted ? resolvedTheme === "dark" : false;
-
-  const colors: { key: StuxColorScheme; label: string; hex: string }[] = [
-    { key: "yellow", label: "Yellow", hex: "#ffea2f" },
-    { key: "lime", label: "Lime", hex: "#d4ff32" },
-    { key: "cyan", label: "Cyan", hex: "#00f0ff" },
-    { key: "orange", label: "Orange", hex: "#ff5416" },
-    { key: "white", label: "White", hex: "#ffffff" },
-    { key: "violet", label: "Violet", hex: "#a855f7" },
-    { key: "emerald", label: "Emerald", hex: "#10b981" },
-  ];
-
-  const patterns: { key: StuxFillPattern; label: string }[] = [
-    { key: "cross", label: "Cross Cut" },
-    { key: "wave", label: "Liquid Wave" },
-    { key: "cyber", label: "Cyber Chevron" },
-    { key: "arc", label: "Convex Arc" },
-    { key: "zigzag", label: "Sawtooth Blade" },
-  ];
+  const handleToggleTheme = React.useCallback(() => {
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  }, [resolvedTheme, setTheme]);
 
   return (
     <main
@@ -137,7 +140,7 @@ export default function StuxButtonPage() {
             <>
               <span className="w-px h-3.5 mx-0.5 bg-zinc-300 dark:bg-zinc-700" />
               <div className="inline-flex items-center gap-1 p-0.5 rounded-full bg-zinc-100 dark:bg-zinc-950/60 border border-zinc-200/60 dark:border-zinc-800/60">
-                {patterns.map((p) => {
+                {PATTERN_OPTIONS.map((p) => {
                   const active = fillPattern === p.key;
                   return (
                     <button
@@ -174,7 +177,7 @@ export default function StuxButtonPage() {
 
           {/* Color Palette Switcher */}
           <div className="flex items-center gap-1 px-1">
-            {colors.map((c) => {
+            {COLOR_OPTIONS.map((c) => {
               const active = colorScheme === c.key;
               return (
                 <button
@@ -256,13 +259,13 @@ export default function StuxButtonPage() {
           {/* Theme Switcher: Direct next-themes toggle */}
           <button
             type="button"
-            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+            onClick={handleToggleTheme}
             className="px-3 py-1.5 rounded-full transition-colors cursor-pointer select-none font-medium text-xs text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white"
           >
             {mounted
               ? resolvedTheme === "dark"
-                ? "☀️ Light"
-                : "🌙 Dark"
+                ? "Light"
+                : "Dark"
               : "Theme"}
           </button>
         </div>

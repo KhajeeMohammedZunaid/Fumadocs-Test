@@ -42,6 +42,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       )}
       suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){function isMonacoError(e){if(!e)return false;var msg=typeof e==="string"?e:(e.message||e.stack||"");var name=e.name||"";return msg.indexOf("domNode")!==-1||msg.indexOf("InstantiationService has been disposed")!==-1||msg.indexOf("Canceled")!==-1||name==="Canceled"||msg.indexOf("prepareRenderText")!==-1;}window.addEventListener("error",function(ev){if(isMonacoError(ev.error)||isMonacoError(ev.message)){ev.preventDefault();ev.stopImmediatePropagation();}},true);window.addEventListener("unhandledrejection",function(ev){if(isMonacoError(ev.reason)){ev.preventDefault();ev.stopImmediatePropagation();}},true);})();`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans">
         <RootProvider>{children}</RootProvider>
       </body>

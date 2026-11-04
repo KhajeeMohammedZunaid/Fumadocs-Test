@@ -230,7 +230,7 @@ export const StuxButton = React.forwardRef<HTMLButtonElement, StuxButtonProps>(
         }
       };
 
-      document.addEventListener("pointerdown", handlePointerDownOutside);
+      document.addEventListener("pointerdown", handlePointerDownOutside, { passive: true });
       return () => {
         document.removeEventListener("pointerdown", handlePointerDownOutside);
       };
@@ -238,15 +238,15 @@ export const StuxButton = React.forwardRef<HTMLButtonElement, StuxButtonProps>(
 
     const isActionActive = isOpen || isTapped;
 
-    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClick = React.useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
       setIsTapped((prev) => !prev);
       onClick?.(e);
-    };
+    }, []);
 
-    const handleMouseLeave = () => {
+    const handleMouseLeave = React.useCallback(() => {
       // On desktop, mouse leave clears isTapped so it follows native hover
       setIsTapped(false);
-    };
+    }, []);
 
     return (
       <>
