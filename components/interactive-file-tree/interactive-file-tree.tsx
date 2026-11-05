@@ -2,8 +2,10 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useTheme } from "next-themes";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import vscDarkPlus from "react-syntax-highlighter/dist/esm/styles/prism/vsc-dark-plus";
+import oneLight from "react-syntax-highlighter/dist/esm/styles/prism/one-light";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Folder01Icon,
@@ -30,7 +32,6 @@ import { React as ReactLogo } from "@/components/logos/react";
 import { TailwindCSS as TailwindLogo } from "@/components/logos/tailwind";
 import type { FileItem, InteractiveFileTreeProps } from "./types";
 
-const CODE_BG = "#161616";
 const CODE_FONT_FAMILY =
   "var(--font-geist-mono), 'Fira Code', 'Courier New', monospace";
 
@@ -38,19 +39,39 @@ const customCodeDarkTheme: { [key: string]: React.CSSProperties } = {
   ...vscDarkPlus,
   'pre[class*="language-"]': {
     ...vscDarkPlus['pre[class*="language-"]'],
-    background: CODE_BG,
-    backgroundColor: CODE_BG,
+    background: "transparent",
+    backgroundColor: "transparent",
     fontFamily: CODE_FONT_FAMILY,
   },
   'code[class*="language-"]': {
     ...vscDarkPlus['code[class*="language-"]'],
-    background: CODE_BG,
-    backgroundColor: CODE_BG,
+    background: "transparent",
+    backgroundColor: "transparent",
     fontFamily: CODE_FONT_FAMILY,
   },
   ':not(pre) > code[class*="language-"]': {
     ...vscDarkPlus[':not(pre) > code[class*="language-"]'],
-    background: CODE_BG,
+    background: "transparent",
+  },
+};
+
+const customCodeLightTheme: { [key: string]: React.CSSProperties } = {
+  ...oneLight,
+  'pre[class*="language-"]': {
+    ...oneLight['pre[class*="language-"]'],
+    background: "transparent",
+    backgroundColor: "transparent",
+    fontFamily: CODE_FONT_FAMILY,
+  },
+  'code[class*="language-"]': {
+    ...oneLight['code[class*="language-"]'],
+    background: "transparent",
+    backgroundColor: "transparent",
+    fontFamily: CODE_FONT_FAMILY,
+  },
+  ':not(pre) > code[class*="language-"]': {
+    ...oneLight[':not(pre) > code[class*="language-"]'],
+    background: "transparent",
   },
 };
 
@@ -81,7 +102,7 @@ function FileTypeIcon({
     <HugeiconsIcon
       icon={File01Icon}
       size={14}
-      className={cn("text-zinc-400 shrink-0", className)}
+      className={cn("text-zinc-500 dark:text-zinc-400 shrink-0", className)}
     />
   );
 }
@@ -139,6 +160,14 @@ export function UniversalFileTree({
   const [copied, setCopied] = React.useState(false);
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const [mobileView, setMobileView] = React.useState<"tree" | "code">("code");
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const isDark = mounted ? resolvedTheme !== "light" : true;
 
   const activeFile = fileMap.get(activeFileId) ?? files[0];
 
@@ -172,7 +201,7 @@ export function UniversalFileTree({
   const heightStyle = typeof height === "number" ? `${height}px` : height;
 
   const renderTreeHeader = () => (
-    <div className="flex items-center justify-between px-3 h-10 border-b border-white/[0.08] bg-[#161616] text-[13px] font-medium text-zinc-200 shrink-0 select-none box-border">
+    <div className="flex items-center justify-between px-3 h-10 border-b border-zinc-200 dark:border-white/[0.08] bg-zinc-50 dark:bg-[#161616] text-[13px] font-medium text-zinc-800 dark:text-zinc-200 shrink-0 select-none box-border">
       <div className="flex items-center gap-2 truncate min-w-0">
         <HugeiconsIcon icon={Folder02Icon} size={16} className="text-sky-500 shrink-0" />
         <span className="truncate font-medium">{title}</span>
@@ -182,16 +211,16 @@ export function UniversalFileTree({
         type="button"
         onClick={() => setSidebarOpen(false)}
         title="Collapse File Tree"
-        className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer shrink-0"
+        className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/60 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-800 transition-colors cursor-pointer shrink-0"
       >
         <HugeiconsIcon
           icon={SidebarLeft01Icon}
           size={15}
-          className="text-zinc-400 hover:text-zinc-200 transition-colors"
+          className="text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors"
         />
       </button>
       {/* Mobile: File count badge */}
-      <span className="flex lg:hidden text-[11px] font-mono h-5 min-w-[20px] px-1.5 items-center justify-center rounded-full bg-zinc-800 text-zinc-400 shrink-0 ml-1 border border-zinc-700/50">
+      <span className="flex lg:hidden text-[11px] font-mono h-5 min-w-[20px] px-1.5 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-400 shrink-0 ml-1 border border-zinc-300 dark:border-zinc-700/50">
         {files.length}
       </span>
     </div>
@@ -207,7 +236,7 @@ export function UniversalFileTree({
             <button
               type="button"
               onClick={() => toggleFolder(folderName)}
-              className="w-full flex items-center gap-1.5 px-2 py-1.5 rounded-md text-[13px] font-medium text-zinc-300 hover:bg-zinc-800/60 hover:text-white transition-colors cursor-pointer select-none text-left min-w-0"
+              className="w-full flex items-center gap-1.5 px-2 py-1.5 rounded-md text-[13px] font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200/60 dark:hover:bg-zinc-800/60 hover:text-zinc-950 dark:hover:text-white transition-colors cursor-pointer select-none text-left min-w-0"
             >
               <motion.span
                 animate={{ rotate: isOpen ? 90 : 0 }}
@@ -217,7 +246,7 @@ export function UniversalFileTree({
                 <HugeiconsIcon
                   icon={ArrowRight01Icon}
                   size={13}
-                  className="text-zinc-400 shrink-0"
+                  className="text-zinc-400 dark:text-zinc-400 shrink-0"
                 />
               </motion.span>
               <HugeiconsIcon
@@ -237,7 +266,7 @@ export function UniversalFileTree({
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                  className="overflow-hidden pl-2 space-y-0.5 border-l border-zinc-800 ml-3.5 my-0.5 min-w-0"
+                  className="overflow-hidden pl-2 space-y-0.5 border-l border-zinc-200 dark:border-zinc-800 ml-3.5 my-0.5 min-w-0"
                 >
                   {filesInFolder.map((file) => {
                     const isActive = file.id === activeFileId;
@@ -250,8 +279,8 @@ export function UniversalFileTree({
                         className={cn(
                           "w-full flex items-center gap-2 px-2 py-1.5 rounded-md text-[13px] transition-colors cursor-pointer text-left min-w-0",
                           isActive
-                            ? "bg-zinc-800 text-white font-medium shadow-xs"
-                            : "text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-100 font-normal"
+                            ? "bg-zinc-200/90 text-zinc-950 dark:bg-zinc-800 dark:text-white font-medium shadow-xs"
+                            : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50 hover:text-zinc-950 dark:hover:text-zinc-100 font-normal"
                         )}
                       >
                         <FileTypeIcon fileName={file.name} />
@@ -272,7 +301,7 @@ export function UniversalFileTree({
     <div
       style={{ height: heightStyle }}
       className={cn(
-        "my-6 rounded-xl border border-white/[0.08] bg-[#161616] overflow-hidden shadow-sm not-prose flex flex-col lg:flex-row relative",
+        "my-6 rounded-xl border border-zinc-200 dark:border-white/[0.08] bg-[#fafafa] dark:bg-[#161616] overflow-hidden shadow-sm not-prose flex flex-col lg:flex-row relative",
         className
       )}
     >
@@ -287,11 +316,11 @@ export function UniversalFileTree({
             animate={{ width: 250, opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden lg:flex flex-col h-full shrink-0 border-r border-white/[0.08] bg-[#161616] overflow-hidden"
+            className="hidden lg:flex flex-col h-full shrink-0 border-r border-zinc-200 dark:border-white/[0.08] bg-zinc-50 dark:bg-[#161616] overflow-hidden"
           >
-            <div className="w-[250px] min-w-[250px] flex flex-col h-full">
+            <div className="w-[250px] min-w-[250px] flex flex-col h-full bg-zinc-50 dark:bg-[#161616]">
               {renderTreeHeader()}
-              <ScrollArea className="flex-1 p-2 overflow-x-hidden bg-[#161616] scroll-fade">
+              <ScrollArea className="flex-1 p-2 overflow-x-hidden bg-zinc-50 dark:bg-[#161616] scroll-fade">
                 {renderFolderList()}
               </ScrollArea>
             </div>
@@ -303,16 +332,16 @@ export function UniversalFileTree({
           MOBILE VIEW: Tree Panel (visible on mobile when mobileView === 'tree')
          ========================================================================= */}
       {mobileView === "tree" && (
-        <div className="flex lg:hidden flex-col flex-1 h-full min-w-0 overflow-hidden bg-[#161616]">
+        <div className="flex lg:hidden flex-col flex-1 h-full min-w-0 overflow-hidden bg-zinc-50 dark:bg-[#161616]">
           {renderTreeHeader()}
-          <ScrollArea className="flex-1 p-2 overflow-x-hidden bg-[#161616] scroll-fade">
+          <ScrollArea className="flex-1 p-2 overflow-x-hidden bg-zinc-50 dark:bg-[#161616] scroll-fade">
             {renderFolderList()}
           </ScrollArea>
-          <div className="p-2 border-t border-white/[0.08] bg-[#161616]">
+          <div className="p-2 border-t border-zinc-200 dark:border-white/[0.08] bg-zinc-50 dark:bg-[#161616]">
             <button
               type="button"
               onClick={() => setMobileView("code")}
-              className="w-full py-1.5 px-3 rounded-md bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-medium cursor-pointer shadow-xs border border-zinc-700"
+              className="w-full py-1.5 px-3 rounded-md bg-zinc-200 hover:bg-zinc-300 text-zinc-900 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-white text-xs font-medium cursor-pointer shadow-xs border border-zinc-300 dark:border-zinc-700"
             >
               Back to Code View ({activeFile?.name})
             </button>
@@ -326,12 +355,12 @@ export function UniversalFileTree({
          ========================================================================= */}
       <div
         className={cn(
-          "flex-col h-full min-w-0 bg-[#161616] overflow-hidden flex-1",
+          "flex-col h-full min-w-0 bg-[#fafafa] dark:bg-[#161616] overflow-hidden flex-1",
           mobileView === "code" ? "flex" : "hidden lg:flex"
         )}
       >
         {/* Code Viewer Top Bar */}
-        <div className="flex items-center justify-between border-b border-white/[0.08] px-3 h-10 bg-[#161616] shrink-0 select-none gap-2 box-border">
+        <div className="flex items-center justify-between border-b border-zinc-200 dark:border-white/[0.08] px-3 h-10 bg-white dark:bg-[#161616] shrink-0 select-none gap-2 box-border">
           {/* Left Controls */}
           <div className="flex items-center gap-2 min-w-0 flex-1">
             {/* Desktop Sidebar Open Button (visible only when file tree sidebar is collapsed) */}
@@ -340,12 +369,12 @@ export function UniversalFileTree({
                 type="button"
                 onClick={() => setSidebarOpen(true)}
                 title="Expand File Tree"
-                className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors cursor-pointer shrink-0"
+                className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-800 transition-colors cursor-pointer shrink-0"
               >
                 <HugeiconsIcon
                   icon={SidebarLeft01Icon}
                   size={15}
-                  className="text-zinc-300 hover:text-white"
+                  className="text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white"
                 />
               </button>
             )}
@@ -354,7 +383,7 @@ export function UniversalFileTree({
             <button
               type="button"
               onClick={() => setMobileView("tree")}
-              className="flex lg:hidden items-center gap-1.5 text-xs text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 h-7 px-2 rounded-md shrink-0 cursor-pointer border border-zinc-700/60 transition-colors"
+              className="flex lg:hidden items-center gap-1.5 text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 h-7 px-2 rounded-md shrink-0 cursor-pointer border border-zinc-200 dark:border-zinc-700/60 transition-colors"
             >
               <HugeiconsIcon icon={Folder02Icon} size={13} className="text-sky-400" />
               <span>Tree</span>
@@ -362,30 +391,30 @@ export function UniversalFileTree({
 
             {/* Desktop: Clean File Indicator (No path text) */}
             {activeFile && (
-              <div className="hidden lg:flex items-center gap-2 text-[13px] text-zinc-200 truncate">
+              <div className="hidden lg:flex items-center gap-2 text-[13px] text-zinc-800 dark:text-zinc-200 truncate">
                 <FileTypeIcon fileName={activeFile.name} />
-                <span className="font-medium text-zinc-200">{activeFile.name}</span>
+                <span className="font-medium text-zinc-900 dark:text-zinc-200">{activeFile.name}</span>
               </div>
             )}
 
             {/* Mobile / Narrow Screen: Dropdown File Selector */}
             <div className="flex lg:hidden">
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center justify-between gap-2 px-2.5 h-7 rounded-md bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-200 border border-zinc-700 transition-colors cursor-pointer max-w-[200px] truncate shadow-xs">
+                <DropdownMenuTrigger className="flex items-center justify-between gap-2 px-2.5 h-7 rounded-md bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-xs text-zinc-800 dark:text-zinc-200 border border-zinc-200 dark:border-zinc-700 transition-colors cursor-pointer max-w-[200px] truncate shadow-xs">
                   <div className="flex items-center gap-1.5 truncate">
                     {activeFile && <FileTypeIcon fileName={activeFile.name} />}
                     <span className="truncate">{activeFile?.name}</span>
                   </div>
                   <HugeiconsIcon icon={ArrowDown01Icon} size={12} className="text-zinc-400 shrink-0" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="w-64 p-1.5 bg-[#161616] border-zinc-800 text-zinc-200 shadow-xl">
-                  <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-zinc-400 px-2 py-1">
+                <DropdownMenuContent align="start" className="w-64 p-1.5 bg-white dark:bg-[#161616] border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-xl">
+                  <DropdownMenuLabel className="text-[10px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400 px-2 py-1">
                     Select Component File
                   </DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-zinc-800 my-1" />
+                  <DropdownMenuSeparator className="bg-zinc-200 dark:bg-zinc-800 my-1" />
                   {folders.map(([folderName, filesInFolder]) => (
                     <DropdownMenuGroup key={folderName}>
-                      <div className="px-2 py-1 text-[11px] font-semibold text-zinc-400 flex items-center gap-1.5">
+                      <div className="px-2 py-1 text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 flex items-center gap-1.5">
                         <HugeiconsIcon icon={Folder01Icon} size={12} className="text-sky-400" />
                         <span>{folderName}</span>
                       </div>
@@ -398,8 +427,8 @@ export function UniversalFileTree({
                             className={cn(
                               "flex items-center justify-between gap-2 px-2 py-1.5 text-xs rounded-sm cursor-pointer transition-colors pl-5",
                               isSelected
-                                ? "bg-zinc-800 text-white font-medium"
-                                : "text-zinc-300 hover:bg-zinc-800/60 hover:text-white"
+                                ? "bg-zinc-100 text-zinc-950 dark:bg-zinc-800 dark:text-white font-medium"
+                                : "text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800/60 dark:hover:text-white"
                             )}
                           >
                             <div className="flex items-center gap-2 truncate">
@@ -421,12 +450,12 @@ export function UniversalFileTree({
             <button
               type="button"
               onClick={handleCopy}
-              className="flex items-center gap-1.5 text-[13px] text-zinc-300 hover:text-white bg-zinc-800 hover:bg-zinc-700 h-7 px-2.5 rounded-md transition-colors cursor-pointer border border-zinc-700/80 shadow-xs"
+              className="flex items-center gap-1.5 text-[13px] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 h-7 px-2.5 rounded-md transition-colors cursor-pointer border border-zinc-200 dark:border-zinc-700/80 shadow-xs select-none"
             >
               <HugeiconsIcon
                 icon={copied ? Tick01Icon : Copy01Icon}
                 size={14}
-                className={copied ? "text-emerald-400" : "text-zinc-400"}
+                className={copied ? "text-emerald-600 dark:text-emerald-400 shrink-0" : "text-zinc-500 dark:text-zinc-400 shrink-0"}
               />
               <span>{copied ? "Copied!" : "Copy"}</span>
             </button>
@@ -434,20 +463,20 @@ export function UniversalFileTree({
         </div>
 
         {/* React Syntax Highlighter Container */}
-        <div className="flex-1 min-h-0 w-full overflow-hidden relative bg-[#161616]">
-          <ScrollArea className="h-full w-full bg-[#161616] scroll-fade">
-            <div className="min-w-fit">
+        <div suppressHydrationWarning className="flex-1 min-h-0 w-full overflow-hidden relative bg-[#fafafa] dark:bg-[#161616]">
+          <ScrollArea className="h-full w-full bg-[#fafafa] dark:bg-[#161616] scroll-fade">
+            <div suppressHydrationWarning className="min-w-fit">
               {activeFile && (
                 <SyntaxHighlighter
                   language={getSyntaxLanguage(activeFile.name)}
-                  style={customCodeDarkTheme}
+                  style={isDark ? customCodeDarkTheme : customCodeLightTheme}
                   showLineNumbers
                   wrapLines={false}
                   customStyle={{
                     margin: 0,
                     padding: "18px 16px",
-                    background: CODE_BG,
-                    backgroundColor: CODE_BG,
+                    background: "transparent",
+                    backgroundColor: "transparent",
                     fontSize: "14px",
                     lineHeight: "24px",
                     fontFamily: CODE_FONT_FAMILY,
@@ -456,7 +485,7 @@ export function UniversalFileTree({
                   lineNumberStyle={{
                     minWidth: "2.75em",
                     paddingRight: "1.25em",
-                    color: "#52525b",
+                    color: isDark ? "#52525b" : "#a1a1aa",
                     userSelect: "none",
                     fontSize: "13px",
                     lineHeight: "24px",
@@ -467,7 +496,7 @@ export function UniversalFileTree({
                       fontFamily: CODE_FONT_FAMILY,
                       fontSize: "14px",
                       lineHeight: "24px",
-                      background: CODE_BG,
+                      background: "transparent",
                     },
                   }}
                 >
