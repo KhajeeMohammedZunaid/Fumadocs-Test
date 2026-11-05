@@ -33,26 +33,37 @@ export function CustomPre({
       ref={figureRef}
       allowCopy={false}
       {...props}
+      className={cn(
+        "my-5 rounded-xl border border-zinc-200/90 dark:border-white/[0.08] shadow-xs overflow-hidden",
+        props.className
+      )}
+      viewportProps={{
+        ...props.viewportProps,
+        className: cn(
+          "text-[14px] leading-relaxed py-4 px-4.5",
+          props.viewportProps?.className
+        ),
+      }}
       Actions={({ className }) => (
-        <div className={cn("flex items-center", className)}>
+        <div className={cn("flex items-center bg-transparent backdrop-blur-none", className)}>
           <button
             type="button"
             onClick={handleCopy}
             aria-label={copied ? "Copied" : "Copy code"}
             title={copied ? "Copied" : "Copy code"}
-            className="flex items-center justify-center size-7 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80 transition-colors cursor-pointer select-none"
+            className="flex items-center justify-center size-8 rounded-md text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer select-none bg-transparent hover:bg-transparent"
           >
             <CopyCheck
               copied={copied}
-              size={14}
-              className={copied ? "text-emerald-400 shrink-0" : "text-zinc-400 shrink-0"}
+              size={16}
+              strokeWidth={1.8}
+              className={copied ? "text-emerald-500 shrink-0" : "text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 shrink-0 transition-colors"}
             />
           </button>
         </div>
       )}
     >
-      <Pre>{children}</Pre>
+      <Pre className="text-[14px] leading-relaxed font-mono">{children}</Pre>
     </CodeBlock>
   );
 }
-

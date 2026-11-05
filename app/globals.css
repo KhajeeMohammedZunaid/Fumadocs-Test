@@ -417,3 +417,25 @@ div.\@container.grid a[href].rounded-lg.border {
   font-weight: 400 !important;
   font-variant-numeric: tabular-nums !important;
 }
+
+
+/* Remove on-hover background color change for codeblock copy icon buttons */
+figure.shiki button[title*="Copy"],
+figure.shiki button[aria-label*="Copy"] {
+  background-color: transparent !important;
+}
+figure.shiki button[title*="Copy"]:hover,
+figure.shiki button[aria-label*="Copy"]:hover {
+  background-color: transparent !important;
+}
+
+/* Dependencies and MDX Code Block Comfort Sizing */
+figure.shiki {
+  margin-top: 1.25rem !important;
+  margin-bottom: 1.25rem !important;
+}
+figure.shiki pre,
+figure.shiki pre code {
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+}

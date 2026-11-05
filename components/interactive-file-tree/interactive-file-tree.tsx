@@ -218,7 +218,7 @@ export function UniversalFileTree({
         type="button"
         onClick={() => setSidebarOpen(false)}
         title="Collapse File Tree"
-        className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/60 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-800 transition-colors cursor-pointer shrink-0"
+        className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer shrink-0 bg-transparent hover:bg-transparent"
       >
         <HugeiconsIcon
           icon={SidebarLeft01Icon}
@@ -376,7 +376,7 @@ export function UniversalFileTree({
                 type="button"
                 onClick={() => setSidebarOpen(true)}
                 title="Expand File Tree"
-                className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-zinc-800 transition-colors cursor-pointer shrink-0"
+                className="hidden lg:flex items-center justify-center h-7 w-7 rounded-md text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white transition-colors cursor-pointer shrink-0 bg-transparent hover:bg-transparent"
               >
                 <HugeiconsIcon
                   icon={SidebarLeft01Icon}
