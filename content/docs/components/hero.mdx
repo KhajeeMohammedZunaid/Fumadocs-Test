@@ -46,3 +46,29 @@ export default function Hero1Page() {
   );
 }
 ```
+
+---
+
+## Props Specification
+
+<PropsTable
+  items={[
+    {
+      name: "src",
+      type: "string",
+      description: "Preview iframe target URL path.",
+    },
+    {
+      name: "title",
+      type: "string",
+      default: '"Hero Section 1"',
+      description: "Display title in the preview window header.",
+    },
+    {
+      name: "defaultHeight",
+      type: "string | number",
+      default: '"720px"',
+      description: "Height constraint for the interactive preview frame.",
+    },
+  ]}
+/>

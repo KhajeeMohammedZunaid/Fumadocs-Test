@@ -22,6 +22,7 @@ import {
   StuxButtonCodeViewer,
 } from "@/components/stux-button";
 import { CustomPre } from "@/components/custom-pre";
+import { PropsTable } from "@/components/props-table";
 
 // Opt dynamic documentation segment out of instant App Shell validation
 // so prerendered SSG pages stream or load directly without Suspense freeze.
@@ -31,6 +32,7 @@ export const instant = false;
 const mdxComponents = {
   ...defaultMdxComponents,
   pre: CustomPre,
+  PropsTable,
   Tab,
   Tabs,
   Files,

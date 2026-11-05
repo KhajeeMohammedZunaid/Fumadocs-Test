@@ -146,15 +146,62 @@ Three proportional size scales adjusting height, endcap width, horizontal paddin
 
 ## Props Specification
 
-| Prop | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
-| `variant` | `"default" \| "edge-fill"` | `"default"` | Determines the interaction mode. `"default"` triggers the split-arrow pass-through animation, while `"edge-fill"` sweeps a seamless SVG contour fill from left to right. |
-| `fillPattern` | `"cross" \| "wave" \| "cyber" \| "arc" \| "zigzag"` | `"cross"` | The leading SVG shape contour used when `variant="edge-fill"`. |
-| `size` | `"sm" \| "default" \| "lg"` | `"default"` | Controls the button's proportional height, endcap width, font size, padding, and arrow distance. |
-| `colorScheme` | `"yellow" \| "lime" \| "cyan" \| "orange" \| "white" \| "violet" \| "emerald"` | `"yellow"` | Built-in high-contrast brutalist color scheme preset. |
-| `text` | `string` | — | Button label text. Overrides default variant fallback text. |
-| `customAccent` | `string` | — | Custom hex or CSS color string to override the accent fill color. |
-| `menuOpen` | `boolean` | `false` | When true, forces the active expanded state (useful for menu triggers or active navigation). |
-| `onClick` | `(e: React.MouseEvent) => void` | — | Click event callback. |
-| `className` | `string` | — | Additional CSS utility classes. |
-| `children` | `React.ReactNode` | — | React children rendered as button content. |
+<PropsTable
+  items={[
+    {
+      name: "variant",
+      type: '"default" | "edge-fill"',
+      default: '"default"',
+      description: "Visual style and interaction physics mode.",
+    },
+    {
+      name: "fillPattern",
+      type: '"cross" | "wave" | "cyber" | "arc" | "zigzag"',
+      default: '"cross"',
+      description: "Leading SVG contour shape for edge-fill sweeps.",
+    },
+    {
+      name: "size",
+      type: '"sm" | "default" | "lg"',
+      default: '"default"',
+      description: "Proportional height and padding scale.",
+    },
+    {
+      name: "colorScheme",
+      type: '"yellow" | "lime" | "cyan" | "orange" | "white" | "violet" | "emerald"',
+      default: '"yellow"',
+      description: "Preset high-contrast brutalist color palette.",
+    },
+    {
+      name: "text",
+      type: "string",
+      description: "Button label text.",
+    },
+    {
+      name: "customAccent",
+      type: "string",
+      description: "Custom hex or CSS accent color.",
+    },
+    {
+      name: "menuOpen",
+      type: "boolean",
+      default: "false",
+      description: "Forces the active expanded state.",
+    },
+    {
+      name: "onClick",
+      type: "(e: React.MouseEvent) => void",
+      description: "Click event callback handler.",
+    },
+    {
+      name: "className",
+      type: "string",
+      description: "Additional CSS class names.",
+    },
+    {
+      name: "children",
+      type: "React.ReactNode",
+      description: "Child elements rendered inside button.",
+    },
+  ]}
+/>

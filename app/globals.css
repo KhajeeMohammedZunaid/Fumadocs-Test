@@ -440,3 +440,112 @@ figure.shiki pre code {
   font-size: 14px !important;
   line-height: 1.65 !important;
 }
+
+
+/* =========================================================================
+   Universal Table & Props Table Styling (Alternating Rows & Column Dividers)
+   ========================================================================= */
+article table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  text-align: left !important;
+  font-size: 0.84rem !important;
+  border: 1px solid var(--color-zinc-200, #e4e4e7) !important;
+  border-radius: 0.75rem !important;
+  overflow: hidden !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 1.5rem !important;
+  background-color: #ffffff !important;
+}
+
+:is(.dark article table) {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background-color: #000000 !important;
+}
+
+article table thead tr {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid var(--color-zinc-200, #e4e4e7) !important;
+}
+:is(.dark article table thead tr) {
+  background-color: #000000 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+article table th {
+  padding: 0.75rem 1rem !important;
+  font-weight: 600 !important;
+  color: var(--color-zinc-900, #18181b) !important;
+  border-right: 1px solid var(--color-zinc-200, #e4e4e7) !important;
+  border-bottom: 1px solid var(--color-zinc-200, #e4e4e7) !important;
+}
+article table th:last-child {
+  border-right: none !important;
+}
+:is(.dark article table th) {
+  color: #ffffff !important;
+  border-right-color: rgba(255, 255, 255, 0.08) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Even rows */
+article table tbody tr:nth-child(even) {
+  background-color: #f8f8f9 !important;
+}
+:is(.dark article table tbody tr:nth-child(even)) {
+  background-color: #121214 !important;
+}
+
+/* Odd rows */
+article table tbody tr:nth-child(odd) {
+  background-color: #ffffff !important;
+}
+:is(.dark article table tbody tr:nth-child(odd)) {
+  background-color: #000000 !important;
+}
+
+article table tbody tr {
+  border-bottom: 1px solid var(--color-zinc-200, #e4e4e7) !important;
+}
+:is(.dark article table tbody tr) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+article table tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+article table td {
+  padding: 0.75rem 1rem !important;
+  border-right: 1px solid var(--color-zinc-200, #e4e4e7) !important;
+  border-bottom: 1px solid var(--color-zinc-200, #e4e4e7) !important;
+  vertical-align: top !important;
+  color: var(--color-zinc-700, #3f3f46) !important;
+}
+article table td:last-child {
+  border-right: none !important;
+}
+:is(.dark article table td) {
+  border-right-color: rgba(255, 255, 255, 0.08) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+  color: #d4d4d8 !important;
+}
+
+/* Code Pills inside Table Cells */
+article table td code {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 0.125rem 0.5rem !important;
+  border-radius: 0.375rem !important;
+  font-family: var(--font-geist-mono), monospace !important;
+  font-size: 12.5px !important;
+  background-color: #f2f2f4 !important;
+  color: #18181b !important;
+  border: 1px solid rgba(212, 212, 216, 0.4) !important;
+  font-weight: 500 !important;
+}
+:is(.dark article table td code) {
+  background-color: #18181b !important;
+  color: #f4f4f5 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
