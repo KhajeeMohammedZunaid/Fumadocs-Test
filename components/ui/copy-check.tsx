@@ -38,21 +38,19 @@ export function CopyCheck({
     ? { duration: 0 }
     : {
         type: 'spring',
-        duration: 0.34,
-        bounce: 0,
-        delay: copied ? 0 : 0.07,
+        stiffness: 480,
+        damping: 32,
+        mass: 0.6,
       }
   const draw: Transition = still
     ? { duration: 0 }
     : copied
-      ? { duration: 0.22, delay: 0.13, ease: EASE_OUT }
-      : { duration: 0.12, ease: 'linear' }
+      ? { duration: 0.16, ease: EASE_OUT }
+      : { duration: 0.1, ease: 'linear' }
 
   const dissolve: Transition = still
     ? { duration: 0 }
-    : copied
-      ? { duration: 0.08, delay: 0.04 }
-      : { duration: 0.1, delay: 0.12 }
+    : { duration: 0.08 }
 
   const pose = (dir: 1 | -1) => (copied ? DISC_POSE : sheetPose(dir))
 
@@ -91,8 +89,14 @@ export function CopyCheck({
         animate={{ ...pose(-1), opacity: copied ? 0 : 1 }}
         transition={{ ...morph, opacity: dissolve }}
         mask={`url(#${seam})`}
+        style={{ willChange: "transform, opacity" }}
       />
-      <motion.rect initial={false} animate={pose(1)} transition={morph} />
+      <motion.rect
+        initial={false}
+        animate={pose(1)}
+        transition={morph}
+        style={{ willChange: "transform" }}
+      />
 
       <motion.path
         d={TICK}
@@ -101,6 +105,7 @@ export function CopyCheck({
         initial={false}
         animate={{ strokeDashoffset: copied ? 0 : 1 }}
         transition={draw}
+        style={{ willChange: "stroke-dashoffset" }}
       />
     </svg>
   )

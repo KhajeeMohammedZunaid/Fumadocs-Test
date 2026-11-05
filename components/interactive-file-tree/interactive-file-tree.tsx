@@ -247,7 +247,8 @@ export function UniversalFileTree({
             >
               <motion.span
                 animate={{ rotate: isOpen ? 90 : 0 }}
-                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                style={{ willChange: "transform" }}
                 className="inline-flex shrink-0 items-center justify-center"
               >
                 <HugeiconsIcon
@@ -272,7 +273,8 @@ export function UniversalFileTree({
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ willChange: "height, opacity" }}
                   className="overflow-hidden pl-2 space-y-0.5 border-l border-zinc-200 dark:border-zinc-800 ml-3.5 my-0.5 min-w-0"
                 >
                   {filesInFolder.map((file) => {
@@ -322,7 +324,8 @@ export function UniversalFileTree({
             initial={{ width: 0, opacity: 0 }}
             animate={{ width: 250, opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            style={{ willChange: "width, opacity" }}
             className="hidden lg:flex flex-col h-full shrink-0 border-r border-zinc-200 dark:border-white/[0.08] bg-zinc-50 dark:bg-[#161616] overflow-hidden"
           >
             <div className="w-[250px] min-w-[250px] flex flex-col h-full bg-zinc-50 dark:bg-[#161616]">

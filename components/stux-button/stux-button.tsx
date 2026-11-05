@@ -161,9 +161,9 @@ const SIZES: Record<
 
 const SPRING_TRANSITION = {
   type: "spring" as const,
-  stiffness: 380,
-  damping: 30,
-  mass: 0.8,
+  stiffness: 450,
+  damping: 32,
+  mass: 0.6,
 };
 
 export interface StuxButtonProps
@@ -261,7 +261,7 @@ export const StuxButton = React.forwardRef<HTMLButtonElement, StuxButtonProps>(
             width: 100%;
             height: 100%;
             pointer-events: none;
-            transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+            transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
             will-change: transform;
           }
           .stux-btn-${id} .stux-arrow-main {
@@ -327,7 +327,7 @@ export const StuxButton = React.forwardRef<HTMLButtonElement, StuxButtonProps>(
                   preserveAspectRatio="none"
                   className={cn(
                     "absolute top-0 bottom-0 left-0 h-full w-[220%] pointer-events-none will-change-transform",
-                    "transition-transform duration-[850ms] ease-[0.22,1,0.36,1]",
+                    "transition-transform duration-[380ms] ease-[0.16,1,0.3,1]",
                     isActionActive
                       ? "translate-x-0"
                       : "-translate-x-[58%] group-hover:translate-x-0 group-focus-visible:translate-x-0"
