@@ -394,3 +394,26 @@ aside#nd-sidebar [data-radix-scroll-area-thumb]:hover {
     --speaker-ms: 260ms;
     --speaker-delay: 80ms;
 }
+
+
+/* =========================================================================
+   Fumadocs Pagination: Remove subtitle/description from Next & Previous buttons
+   ========================================================================= */
+div.\@container.grid a[href].rounded-lg.border > p.text-fd-muted-foreground,
+a[href][class*="hover:text-fd-accent-foreground"] > p.text-fd-muted-foreground,
+a[href][class*="text-fd-accent-foreground"] > p.text-fd-muted-foreground {
+  display: none !important;
+}
+
+div.\@container.grid a[href].rounded-lg.border {
+  padding-top: 0.875rem !important;
+  padding-bottom: 0.875rem !important;
+}
+
+/* Ensure vertical code line numbers maintain consistent font style across themes */
+.react-syntax-highlighter-line-number {
+  font-family: var(--font-geist-mono), 'Fira Code', 'Courier New', monospace !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  font-variant-numeric: tabular-nums !important;
+}

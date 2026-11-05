@@ -28,6 +28,7 @@ import {
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { CopyCheck } from "@/components/ui/copy-check";
 import { React as ReactLogo } from "@/components/logos/react";
 import { TailwindCSS as TailwindLogo } from "@/components/logos/tailwind";
 import type { FileItem, InteractiveFileTreeProps } from "./types";
@@ -62,12 +63,18 @@ const customCodeLightTheme: { [key: string]: React.CSSProperties } = {
     background: "transparent",
     backgroundColor: "transparent",
     fontFamily: CODE_FONT_FAMILY,
+    fontSize: "14px",
+    lineHeight: "24px",
+    fontStyle: "normal",
   },
   'code[class*="language-"]': {
     ...oneLight['code[class*="language-"]'],
     background: "transparent",
     backgroundColor: "transparent",
     fontFamily: CODE_FONT_FAMILY,
+    fontSize: "14px",
+    lineHeight: "24px",
+    fontStyle: "normal",
   },
   ':not(pre) > code[class*="language-"]': {
     ...oneLight[':not(pre) > code[class*="language-"]'],
@@ -452,8 +459,8 @@ export function UniversalFileTree({
               onClick={handleCopy}
               className="flex items-center gap-1.5 text-[13px] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 h-7 px-2.5 rounded-md transition-colors cursor-pointer border border-zinc-200 dark:border-zinc-700/80 shadow-xs select-none"
             >
-              <HugeiconsIcon
-                icon={copied ? Tick01Icon : Copy01Icon}
+              <CopyCheck
+                copied={copied}
                 size={14}
                 className={copied ? "text-emerald-600 dark:text-emerald-400 shrink-0" : "text-zinc-500 dark:text-zinc-400 shrink-0"}
               />
@@ -485,11 +492,13 @@ export function UniversalFileTree({
                   lineNumberStyle={{
                     minWidth: "2.75em",
                     paddingRight: "1.25em",
-                    color: isDark ? "#52525b" : "#a1a1aa",
+                    color: "#52525b",
                     userSelect: "none",
                     fontSize: "13px",
                     lineHeight: "24px",
                     fontFamily: CODE_FONT_FAMILY,
+                    fontStyle: "normal",
+                    fontWeight: 400,
                   }}
                   codeTagProps={{
                     style: {

@@ -17,6 +17,7 @@ import {
   type StuxFillPattern,
 } from "./stux-button";
 import { cn } from "@/lib/utils";
+import { CopyCheck } from "@/components/ui/copy-check";
 
 // Hoist static option arrays outside component (Vercel best practice: server-hoist-static-io)
 const COLOR_OPTIONS: { key: StuxColorScheme; label: string; hex: string }[] = [
@@ -135,10 +136,10 @@ export function StuxButtonStudio() {
             title="Copy JSX component snippet"
             className="flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-zinc-300 dark:text-zinc-950 transition-colors cursor-pointer shadow-xs ml-1 font-sans"
           >
-            <HugeiconsIcon
-              icon={copied ? Tick01Icon : Copy01Icon}
+            <CopyCheck
+              copied={copied}
               size={13}
-              className={copied ? "text-emerald-400 dark:text-emerald-600" : "text-zinc-300 dark:text-zinc-700"}
+              className={copied ? "text-emerald-400 dark:text-emerald-600 shrink-0" : "text-zinc-300 dark:text-zinc-700 shrink-0"}
             />
             <span>{copied ? "Copied!" : "Copy JSX"}</span>
           </button>
