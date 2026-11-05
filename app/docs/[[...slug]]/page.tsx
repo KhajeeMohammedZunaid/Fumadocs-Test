@@ -24,10 +24,6 @@ import {
 import { CustomPre } from "@/components/custom-pre";
 import { PropsTable } from "@/components/props-table";
 
-// Opt dynamic documentation segment out of instant App Shell validation
-// so prerendered SSG pages stream or load directly without Suspense freeze.
-export const instant = false;
-
 // Hoist static MDX components to module level (Vercel best practice: server-hoist-static-io & rerender-no-inline-components)
 const mdxComponents = {
   ...defaultMdxComponents,

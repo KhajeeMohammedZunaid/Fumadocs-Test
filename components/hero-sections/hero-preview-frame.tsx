@@ -42,18 +42,18 @@ export function HeroPreviewFrame({
   const [key, setKey] = React.useState(0);
 
   return (
-    <div className="my-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/60 dark:bg-zinc-950/60 overflow-hidden shadow-sm not-prose">
+    <div className="my-6 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-100/60 dark:bg-zinc-950/60 overflow-hidden shadow-sm not-prose w-full max-w-full min-w-0">
       {/* Top Controls Bar */}
-      <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 px-4 py-2.5 bg-white dark:bg-zinc-900/80 backdrop-blur">
+      <div className="flex flex-wrap sm:flex-nowrap items-center justify-between border-b border-zinc-200 dark:border-zinc-800 px-3 sm:px-4 py-2.5 bg-white dark:bg-zinc-900/80 backdrop-blur gap-2">
         {/* Title */}
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
+        <div className="flex items-center gap-2 min-w-0 truncate">
+          <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100 truncate">
             {title}
           </span>
         </div>
 
         {/* Device Switcher & Open Link */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 shrink-0">
           {/* Mobile Device Switcher Dropdown (shadcn) */}
           <div className="flex sm:hidden items-center">
             <DropdownMenu>
@@ -164,14 +164,14 @@ export function HeroPreviewFrame({
             title="Open full preview in new tab"
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-zinc-50 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors border border-zinc-200 dark:border-zinc-800 no-underline cursor-pointer"
           >
-            <span>Full Preview</span>
+            <span className="hidden xs:inline">Full Preview</span>
             <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} />
           </a>
         </div>
       </div>
 
       {/* Frame Container */}
-      <div className="flex items-center justify-center p-3 sm:p-6 bg-zinc-100/50 dark:bg-zinc-950/50 min-h-[640px] overflow-hidden">
+      <div className="flex items-center justify-center p-2 sm:p-6 bg-zinc-100/50 dark:bg-zinc-950/50 min-h-[480px] sm:min-h-[640px] overflow-hidden w-full max-w-full">
         <div
           className={cn(
             "w-full transition-all duration-300 ease-in-out mx-auto rounded-lg overflow-hidden border border-zinc-200/80 dark:border-zinc-800 shadow-sm bg-white dark:bg-black",
@@ -182,7 +182,7 @@ export function HeroPreviewFrame({
             key={key}
             src={src}
             title={title}
-            className="w-full h-[620px] border-0"
+            className="w-full h-[500px] sm:h-[620px] border-0"
             loading="lazy"
           />
         </div>

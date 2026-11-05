@@ -4,14 +4,12 @@ import type { NextConfig } from "next";
 const withMDX = createMDX();
 
 const nextConfig: NextConfig = {
-  // REMOVED THE PORT NUMBER ':3000'
   allowedDevOrigins: [
-    '192.168.0.114'
+    '192.168.0.103'
   ],
-  /* config options here */
+  cacheComponents: true,
   experimental: {
     agentFeedback: true,
-    
     optimizePackageImports: [
       "lucide-react",
       "@hugeicons/react",
@@ -20,8 +18,6 @@ const nextConfig: NextConfig = {
       "motion",
     ],
   },
-  cacheComponents: true,
-  partialPrefetching: true,
   turbopack: {
     rules: {
       "*.css": {

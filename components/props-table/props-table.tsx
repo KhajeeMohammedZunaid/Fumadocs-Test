@@ -19,7 +19,7 @@ export function PropsTable({ items, className }: PropsTableProps) {
   return (
     <div
       className={cn(
-        "my-6 w-full overflow-hidden rounded-xl border border-zinc-200 dark:border-white/[0.08] shadow-xs not-prose bg-white dark:bg-black",
+        "my-6 w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-zinc-200 dark:border-white/[0.08] shadow-xs not-prose bg-white dark:bg-black",
         className
       )}
     >
@@ -27,18 +27,18 @@ export function PropsTable({ items, className }: PropsTableProps) {
         <table className="w-full border-collapse text-left text-[13px] sm:text-sm">
           <thead>
             <tr className="border-b border-zinc-200 dark:border-white/[0.08] bg-white dark:bg-black">
-              <th className="py-3 px-4 font-semibold text-zinc-900 dark:text-white border-r border-zinc-200 dark:border-white/[0.08] w-[22%] min-w-[130px]">
+              <th className="py-3 px-4 font-semibold text-zinc-900 dark:text-white border-r border-zinc-200 dark:border-white/[0.08] w-[22%] min-w-[120px]">
                 Prop name
               </th>
-              <th className="py-3 px-4 font-semibold text-zinc-900 dark:text-white border-r border-zinc-200 dark:border-white/[0.08] w-[24%] min-w-[140px]">
+              <th className="py-3 px-4 font-semibold text-zinc-900 dark:text-white border-r border-zinc-200 dark:border-white/[0.08] w-[24%] min-w-[120px]">
                 Type
               </th>
               {hasDefault && (
-                <th className="py-3 px-4 font-semibold text-zinc-900 dark:text-white border-r border-zinc-200 dark:border-white/[0.08] w-[18%] min-w-[110px]">
+                <th className="py-3 px-4 font-semibold text-zinc-900 dark:text-white border-r border-zinc-200 dark:border-white/[0.08] w-[18%] min-w-[100px]">
                   Default
                 </th>
               )}
-              <th className="py-3 px-4 font-semibold text-zinc-900 dark:text-white min-w-[220px]">
+              <th className="py-3 px-4 font-semibold text-zinc-900 dark:text-white min-w-[200px]">
                 Description
               </th>
             </tr>
@@ -98,4 +98,3 @@ export function PropsTable({ items, className }: PropsTableProps) {
     </div>
   );
 }
-

@@ -4,8 +4,6 @@ import * as React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Copy01Icon,
-  Tick01Icon,
   ReloadIcon,
   GridIcon,
 } from "@hugeicons/core-free-icons";
@@ -82,20 +80,37 @@ export function StuxButtonStudio() {
     return `<StuxButton${propsStr}>${buttonText}</StuxButton>`;
   }, [variant, fillPattern, colorScheme, size, buttonText]);
 
-  const handleCopyCode = React.useCallback(async () => {
+  const handleCopyCode = React.useCallback(async (e?: React.SyntheticEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     try {
-      await navigator.clipboard.writeText(generatedCode);
-      setCopied(true);
-      if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
-      copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
+      if (typeof navigator !== "undefined" && navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(generatedCode);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = generatedCode;
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        textarea.style.top = "-9999px";
+        textarea.setAttribute("readonly", "");
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
     } catch {
       // fallback
     }
+    setCopied(true);
+    if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
+    copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
   }, [generatedCode]);
 
   return (
     <div className="my-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden shadow-sm not-prose flex flex-col font-sans">
-      {/* Studio Top Header (Zero emojis, zero glowing badges) */}
+      {/* Studio Top Header */}
       <div className="flex items-center justify-between border-b border-zinc-200 dark:border-zinc-800 px-4 py-2.5 bg-zinc-50 dark:bg-zinc-900/60 backdrop-blur select-none">
         <span className="text-xs font-semibold text-zinc-900 dark:text-zinc-100 font-sans tracking-tight">
           Interactive Studio
@@ -133,8 +148,13 @@ export function StuxButtonStudio() {
           <button
             type="button"
             onClick={handleCopyCode}
+            onPointerDown={(e) => {
+              if (e.pointerType === "touch") {
+                handleCopyCode(e);
+              }
+            }}
             title="Copy JSX component snippet"
-            className="flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-zinc-300 dark:text-zinc-950 transition-colors cursor-pointer shadow-xs ml-1 font-sans"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-zinc-300 dark:text-zinc-950 transition-colors cursor-pointer shadow-xs ml-1 font-sans touch-manipulation active:scale-95"
           >
             <CopyCheck
               copied={copied}
@@ -146,7 +166,7 @@ export function StuxButtonStudio() {
         </div>
       </div>
 
-      {/* Center Stage Preview Canvas (Clean, unmuted, zero clutter text) */}
+      {/* Center Stage Preview Canvas */}
       <div
         className={cn(
           "relative min-h-[220px] sm:min-h-[260px] w-full flex items-center justify-center p-8 transition-colors select-none overflow-hidden",
@@ -172,7 +192,7 @@ export function StuxButtonStudio() {
         </motion.div>
       </div>
 
-      {/* Control Panel: 4 Core Controls Aligned 4 in single line on desktop, 2/2 on tablets/mobile */}
+      {/* Control Panel: 4 Core Controls */}
       <div className="border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50/70 dark:bg-zinc-900/50 p-4 flex flex-col gap-3 font-sans">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
           {/* 1. Variant Selector */}

@@ -11,8 +11,6 @@ import {
   Folder01Icon,
   Folder02Icon,
   File01Icon,
-  Copy01Icon,
-  Tick01Icon,
   ArrowDown01Icon,
   ArrowRight01Icon,
   SidebarLeft01Icon,
@@ -43,12 +41,15 @@ const customCodeDarkTheme: { [key: string]: React.CSSProperties } = {
     background: "transparent",
     backgroundColor: "transparent",
     fontFamily: CODE_FONT_FAMILY,
+    padding: "16px 18px",
+    margin: 0,
   },
   'code[class*="language-"]': {
     ...vscDarkPlus['code[class*="language-"]'],
     background: "transparent",
     backgroundColor: "transparent",
     fontFamily: CODE_FONT_FAMILY,
+    padding: 0,
   },
   ':not(pre) > code[class*="language-"]': {
     ...vscDarkPlus[':not(pre) > code[class*="language-"]'],
@@ -66,6 +67,8 @@ const customCodeLightTheme: { [key: string]: React.CSSProperties } = {
     fontSize: "14px",
     lineHeight: "24px",
     fontStyle: "normal",
+    padding: "16px 18px",
+    margin: 0,
   },
   'code[class*="language-"]': {
     ...oneLight['code[class*="language-"]'],
@@ -75,6 +78,7 @@ const customCodeLightTheme: { [key: string]: React.CSSProperties } = {
     fontSize: "14px",
     lineHeight: "24px",
     fontStyle: "normal",
+    padding: 0,
   },
   ':not(pre) > code[class*="language-"]': {
     ...oneLight[':not(pre) > code[class*="language-"]'],
@@ -166,7 +170,6 @@ export function UniversalFileTree({
 
   const [copied, setCopied] = React.useState(false);
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
-  const [mobileView, setMobileView] = React.useState<"tree" | "code">("code");
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
 
@@ -187,18 +190,34 @@ export function UniversalFileTree({
 
   const handleSelectFile = React.useCallback((fileId: string) => {
     setActiveFileId(fileId);
-    setMobileView("code");
   }, []);
 
-  const handleCopy = React.useCallback(async () => {
+  const handleCopy = React.useCallback(async (e?: React.SyntheticEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (!activeFile) return;
     try {
-      await navigator.clipboard.writeText(activeFile.code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      if (typeof navigator !== "undefined" && navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(activeFile.code);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = activeFile.code;
+        textarea.style.position = "fixed";
+        textarea.style.left = "-9999px";
+        textarea.style.top = "-9999px";
+        textarea.setAttribute("readonly", "");
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
     } catch {
-      // fallback
+      // Fallback
     }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   }, [activeFile]);
 
   if (!files || files.length === 0) {
@@ -339,36 +358,9 @@ export function UniversalFileTree({
       </AnimatePresence>
 
       {/* =========================================================================
-          MOBILE VIEW: Tree Panel (visible on mobile when mobileView === 'tree')
+          CODE SYNTAX HIGHLIGHTER & VIEWER
          ========================================================================= */}
-      {mobileView === "tree" && (
-        <div className="flex lg:hidden flex-col flex-1 h-full min-w-0 overflow-hidden bg-zinc-50 dark:bg-[#161616]">
-          {renderTreeHeader()}
-          <ScrollArea className="flex-1 p-2 overflow-x-hidden bg-zinc-50 dark:bg-[#161616] scroll-fade">
-            {renderFolderList()}
-          </ScrollArea>
-          <div className="p-2 border-t border-zinc-200 dark:border-white/[0.08] bg-zinc-50 dark:bg-[#161616]">
-            <button
-              type="button"
-              onClick={() => setMobileView("code")}
-              className="w-full py-1.5 px-3 rounded-md bg-zinc-200 hover:bg-zinc-300 text-zinc-900 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-white text-xs font-medium cursor-pointer shadow-xs border border-zinc-300 dark:border-zinc-700"
-            >
-              Back to Code View ({activeFile?.name})
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* =========================================================================
-          RIGHT PANEL: Code Syntax Highlighter & Viewer
-          (Always visible on lg:; on mobile visible when mobileView === 'code')
-         ========================================================================= */}
-      <div
-        className={cn(
-          "flex-col h-full min-w-0 bg-[#fafafa] dark:bg-[#161616] overflow-hidden flex-1",
-          mobileView === "code" ? "flex" : "hidden lg:flex"
-        )}
-      >
+      <div className="flex flex-col h-full min-w-0 bg-[#fafafa] dark:bg-[#161616] overflow-hidden flex-1">
         {/* Code Viewer Top Bar */}
         <div className="flex items-center justify-between border-b border-zinc-200 dark:border-white/[0.08] px-3 h-10 bg-white dark:bg-[#161616] shrink-0 select-none gap-2 box-border">
           {/* Left Controls */}
@@ -389,17 +381,7 @@ export function UniversalFileTree({
               </button>
             )}
 
-            {/* Mobile / Narrow Screen: Browse Tree button */}
-            <button
-              type="button"
-              onClick={() => setMobileView("tree")}
-              className="flex lg:hidden items-center gap-1.5 text-xs text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 h-7 px-2 rounded-md shrink-0 cursor-pointer border border-zinc-200 dark:border-zinc-700/60 transition-colors"
-            >
-              <HugeiconsIcon icon={Folder02Icon} size={13} className="text-sky-400" />
-              <span>Tree</span>
-            </button>
-
-            {/* Desktop: Clean File Indicator (No path text) */}
+            {/* Desktop: Clean File Indicator */}
             {activeFile && (
               <div className="hidden lg:flex items-center gap-2 text-[13px] text-zinc-800 dark:text-zinc-200 truncate">
                 <FileTypeIcon fileName={activeFile.name} />
@@ -460,7 +442,12 @@ export function UniversalFileTree({
             <button
               type="button"
               onClick={handleCopy}
-              className="flex items-center gap-1.5 text-[13px] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 h-7 px-2.5 rounded-md transition-colors cursor-pointer border border-zinc-200 dark:border-zinc-700/80 shadow-xs select-none"
+              onPointerDown={(e) => {
+                if (e.pointerType === "touch") {
+                  handleCopy(e);
+                }
+              }}
+              className="flex items-center gap-1.5 text-[13px] text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 h-7 px-2.5 rounded-md transition-colors cursor-pointer border border-zinc-200 dark:border-zinc-700/80 shadow-xs select-none touch-manipulation active:scale-95"
             >
               <CopyCheck
                 copied={copied}
@@ -480,28 +467,17 @@ export function UniversalFileTree({
                 <SyntaxHighlighter
                   language={getSyntaxLanguage(activeFile.name)}
                   style={isDark ? customCodeDarkTheme : customCodeLightTheme}
-                  showLineNumbers
+                  showLineNumbers={false}
                   wrapLines={false}
                   customStyle={{
                     margin: 0,
-                    padding: "18px 16px",
+                    padding: "16px 18px",
                     background: "transparent",
                     backgroundColor: "transparent",
                     fontSize: "14px",
                     lineHeight: "24px",
                     fontFamily: CODE_FONT_FAMILY,
                     minWidth: "100%",
-                  }}
-                  lineNumberStyle={{
-                    minWidth: "2.75em",
-                    paddingRight: "1.25em",
-                    color: "#52525b",
-                    userSelect: "none",
-                    fontSize: "13px",
-                    lineHeight: "24px",
-                    fontFamily: CODE_FONT_FAMILY,
-                    fontStyle: "normal",
-                    fontWeight: 400,
                   }}
                   codeTagProps={{
                     style: {
@@ -524,4 +500,3 @@ export function UniversalFileTree({
 }
 
 export const InteractiveFileTree = UniversalFileTree;
-

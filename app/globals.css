@@ -242,54 +242,49 @@
 }
 
 /* =========================================================================
-   Fumadocs Documentation Layout Optimization:
-   - Sidebar always open and docked on desktop (collapsible: false)
-   - Right-side gap balanced with elegant, spacious breathing room (1.75rem / 28px)
-   - Fluid middle content expanding to 100% available viewport width
+   Fumadocs Documentation Layout:
+   - Fluid responsive layout across mobile, tablet, and desktop
+   - On desktop (>= 1280px / xl): Docked sidebar and balanced TOC breathing room
+   - On mobile & tablet (< 1280px): Native single-column/fluid layout with sheet drawer
    ========================================================================= */
-:root {
-  --fd-layout-width: 100% !important;
-  --fd-toc-width: 220px !important;
-  --fd-sidebar-width: 268px !important;
-}
-
-#nd-docs-layout {
-  --fd-layout-width: 100% !important;
-  --fd-toc-width: 220px !important;
-  --fd-sidebar-width: 268px !important;
-  grid-template:
-    "sidebar sidebar header toc toc" var(--fd-docs-row-2)
-    "sidebar sidebar toc-popover toc toc" var(--fd-toc-popover-height)
-    "sidebar sidebar tabs toc toc" auto
-    "sidebar sidebar main toc toc" 1fr / 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 220px) 1.75rem !important;
-  grid-template-columns: 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 220px) 1.75rem !important;
-}
 
 [data-layout-main] {
   width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
   justify-items: stretch !important;
 }
 
 #nd-page[data-layout-content] {
   max-width: 100% !important;
   width: 100% !important;
+  min-width: 0 !important;
 }
 
-/* Dock Table of Contents with elegant, spacious right-side breathing room */
-#nd-toc {
-  width: var(--fd-toc-width, 220px) !important;
-  max-width: var(--fd-toc-width, 220px) !important;
-  justify-self: start !important;
-  margin-right: auto !important;
-  margin-left: 0 !important;
-  padding-right: 1rem !important;
-  padding-left: 0.5rem !important;
-}
+/* Desktop Only: Custom wide columns & docked TOC on screens >= 1280px */
+@media (min-width: 1280px) {
+  :root {
+    --fd-layout-width: 100% !important;
+    --fd-toc-width: 220px !important;
+    --fd-sidebar-width: 268px !important;
+  }
 
-/* On desktop, keep sidebar open and full width */
-@media (min-width: 768px) {
   #nd-docs-layout {
+    --fd-layout-width: 100% !important;
+    --fd-toc-width: 220px !important;
+    --fd-sidebar-width: 268px !important;
     --fd-sidebar-col: var(--fd-sidebar-width, 268px) !important;
+    grid-template-columns: 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 220px) 1.75rem !important;
+  }
+
+  #nd-toc {
+    width: var(--fd-toc-width, 220px) !important;
+    max-width: var(--fd-toc-width, 220px) !important;
+    justify-self: start !important;
+    margin-right: auto !important;
+    margin-left: 0 !important;
+    padding-right: 1rem !important;
+    padding-left: 0.5rem !important;
   }
 }
 
@@ -347,55 +342,58 @@ aside#nd-sidebar [data-radix-scroll-area-scrollbar][data-state="hidden"] [data-r
 aside#nd-sidebar [data-radix-scroll-area-thumb]:hover {
   opacity: 1 !important;
 }
-  [data-slot='copy-check'] [data-copy-sheet='back'] {
-    transition: translate 140ms cubic-bezier(0.16, 1, 0.3, 1); will-change: translate;
+
+/* Morphing Copy Icon Animation & Touch/Tap Support */
+[data-slot='copy-check'] [data-copy-sheet='back'] {
+  transition: translate 140ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: translate;
 }
-  :where(button, a, [role='button']):not(:disabled, [aria-disabled='true']):hover [data-slot='copy-check']:not([data-copied]) [data-copy-sheet='back'] {
-    translate: 2px 0;
-}
-  .sound-slash {
-    stroke-dasharray: 1 2;
-    stroke-dashoffset: 1.02;
-    --slash-ms: 200ms;
-    transition: stroke-dashoffset var(--slash-ms) var(--ease-out);
-}
-  [data-muted='true'] .sound-slash {
-    stroke-dashoffset: 0;
-    --slash-ms: 260ms;
-}
-  .sound-wave {
-    transform-box: view-box;
-    transform-origin: 11px 12px;
-    transition: opacity 130ms var(--ease-out) var(--wave-delay), transform 130ms var(--ease-out) var(--wave-delay), filter 130ms var(--ease-out) var(--wave-delay);
-}
-  [data-muted='true'] .sound-wave {
-    opacity: 0;
-    transform: scale(0.25);
-    filter: blur(1px);
-}
-  .sound-wave-inner {
-    --wave-delay: 45ms;
-}
-  .sound-wave-outer {
-    --wave-delay: 20ms;
-}
-  [data-muted='true'] .sound-wave-inner {
-    --wave-delay: 50ms;
-}
-  [data-muted='true'] .sound-wave-outer {
-    --wave-delay: 75ms;
-}
-  .sound-speaker {
-    --speaker-ms: 220ms;
-    --speaker-delay: 0ms;
-    transition: transform var(--speaker-ms) var(--ease-out) var(--speaker-delay);
-}
-  [data-muted='true'] .sound-speaker {
-    transform: translateX(5.5px);
-    --speaker-ms: 260ms;
-    --speaker-delay: 80ms;
+:where(button, a, [role='button']):not(:disabled, [aria-disabled='true']):is(:hover, :active, :focus-visible) [data-slot='copy-check']:not([data-copied]) [data-copy-sheet='back'] {
+  translate: 2px 0;
 }
 
+.sound-slash {
+  stroke-dasharray: 1 2;
+  stroke-dashoffset: 1.02;
+  --slash-ms: 200ms;
+  transition: stroke-dashoffset var(--slash-ms) var(--ease-out);
+}
+[data-muted='true'] .sound-slash {
+  stroke-dashoffset: 0;
+  --slash-ms: 260ms;
+}
+.sound-wave {
+  transform-box: view-box;
+  transform-origin: 11px 12px;
+  transition: opacity 130ms var(--ease-out) var(--wave-delay), transform 130ms var(--ease-out) var(--wave-delay), filter 130ms var(--ease-out) var(--wave-delay);
+}
+[data-muted='true'] .sound-wave {
+  opacity: 0;
+  transform: scale(0.25);
+  filter: blur(1px);
+}
+.sound-wave-inner {
+  --wave-delay: 45ms;
+}
+.sound-wave-outer {
+  --wave-delay: 20ms;
+}
+[data-muted='true'] .sound-wave-inner {
+  --wave-delay: 50ms;
+}
+[data-muted='true'] .sound-wave-outer {
+  --wave-delay: 75ms;
+}
+.sound-speaker {
+  --speaker-ms: 220ms;
+  --speaker-delay: 0ms;
+  transition: transform var(--speaker-ms) var(--ease-out) var(--speaker-delay);
+}
+[data-muted='true'] .sound-speaker {
+  transform: translateX(5.5px);
+  --speaker-ms: 260ms;
+  --speaker-delay: 80ms;
+}
 
 /* =========================================================================
    Fumadocs Pagination: Remove subtitle/description from Next & Previous buttons
@@ -411,14 +409,15 @@ div.\@container.grid a[href].rounded-lg.border {
   padding-bottom: 0.875rem !important;
 }
 
-/* Ensure vertical code line numbers maintain consistent font style across themes */
-.react-syntax-highlighter-line-number {
-  font-family: var(--font-geist-mono), 'Fira Code', 'Courier New', monospace !important;
-  font-style: normal !important;
-  font-weight: 400 !important;
-  font-variant-numeric: tabular-nums !important;
+/* Remove all vertical line numbers across code blocks */
+.react-syntax-highlighter-line-number,
+[data-line-numbers] [data-line]::before,
+.line-numbers,
+.line-number,
+span[data-line-number],
+code [data-line]::before {
+  display: none !important;
 }
-
 
 /* Remove on-hover background color change for codeblock copy icon buttons */
 figure.shiki button[title*="Copy"],
@@ -440,7 +439,6 @@ figure.shiki pre code {
   font-size: 14px !important;
   line-height: 1.65 !important;
 }
-
 
 /* =========================================================================
    Universal Table & Props Table Styling (Alternating Rows & Column Dividers)

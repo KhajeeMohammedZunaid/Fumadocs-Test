@@ -14,17 +14,10 @@ const navLinks = [
   },
 ];
 
+// In desktop preview, the sidebar is permanently docked and not closable (collapsible: false).
+// On mobile and tablet, the responsive slide-in drawer functions via the mobile navbar hamburger.
 const sidebarConfig = {
   collapsible: false,
-};
-
-const docsContainerProps = {
-  style: {
-    gridTemplate: `"sidebar sidebar header toc toc"
-"sidebar sidebar toc-popover toc toc"
-"sidebar sidebar tabs toc toc"
-"sidebar sidebar main toc toc" 1fr / 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 220px) 1.75rem`,
-  },
 };
 
 export default function RootDocsLayout({ children }: { children: ReactNode }) {
@@ -34,7 +27,6 @@ export default function RootDocsLayout({ children }: { children: ReactNode }) {
       nav={navConfig}
       links={navLinks}
       sidebar={sidebarConfig}
-      containerProps={docsContainerProps}
     >
       {children}
     </DocsLayout>
