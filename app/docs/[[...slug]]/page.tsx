@@ -14,6 +14,10 @@ import {
   InteractiveFileTree,
 } from "@/components/hero-sections";
 import {
+  Hero2,
+  Hero2FileTree,
+} from "@/components/hero-section-2";
+import {
   UniversalFileTree,
 } from "@/components/interactive-file-tree";
 import {
@@ -36,6 +40,8 @@ const mdxComponents = {
   File,
   HeroPreviewFrame,
   InteractiveFileTree,
+  Hero2,
+  Hero2FileTree,
   UniversalFileTree,
   StuxButton,
   StuxButtonStudio,
