@@ -1,0 +1,51 @@
+---
+title: Hero Section 2
+description: A modern architectural SaaS hero section featuring framed grid borders, animated blur-reveal typography, and responsive logo ribbon.
+---
+
+## Live Preview
+
+<HeroPreviewFrame src="/preview/hero-2" title="Hero Section 2" />
+
+---
+
+## Manual Installation
+
+### 1. Install Dependencies
+
+Install the required dependencies:
+
+```bash
+npm install motion next-themes @radix-ui/react-scroll-area
+```
+
+### 2. Component Files
+
+<Hero2FileTree />
+
+---
+
+## Full Page Usage
+
+Import and assemble the layout in your page:
+
+```tsx
+import { Hero2 } from "@/components/hero-section-2";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+export const metadata = {
+  title: "Zuris - Headless CMS & Content Platform",
+  description:
+    "Create, manage, and publish content across your sites and apps in one fast workspace.",
+};
+
+export default function Hero2Page() {
+  return (
+    <main className="w-full h-screen h-[100dvh] overflow-hidden bg-white dark:bg-[#09090b]">
+      <ScrollArea className="w-full h-full">
+        <Hero2 />
+      </ScrollArea>
+    </main>
+  );
+}
+```
