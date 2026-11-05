@@ -29,16 +29,16 @@ export function HeroTextSwap() {
           initial={
             shouldReduceMotion
               ? { opacity: 1 }
-              : { opacity: 0, y: 8, filter: "blur(2px)" }
+              : { opacity: 0, y: 8, filter: "blur(3.5px)" }
           }
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           exit={
             shouldReduceMotion
               ? { opacity: 1 }
-              : { opacity: 0, y: -8, filter: "blur(2px)" }
+              : { opacity: 0, y: -8, filter: "blur(3.5px)" }
           }
           transition={{
-            duration: shouldReduceMotion ? 0 : 0.18,
+            duration: shouldReduceMotion ? 0 : 0.21,
             ease: [0.16, 1, 0.3, 1],
           }}
           className="inline-block whitespace-nowrap"
