@@ -1,4 +1,5 @@
 {
   "title": "Components",
+  "defaultOpen": true,
   "pages": ["!index", "hero", "hero-section-2", "button"]
 }
