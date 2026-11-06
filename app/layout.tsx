@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { RootProvider } from "fumadocs-ui/provider/next";
+import { SiteNavbar } from "@/components/site-navbar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -33,6 +34,13 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+// Hoist static theme config to module level (Vercel best practice: server-hoist-static-io)
+const rootProviderTheme = {
+  scriptProps: {
+    async: true,
+  },
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -48,7 +56,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-sans">
-        <RootProvider>{children}</RootProvider>
+        <RootProvider theme={rootProviderTheme}>
+          {/* Global persistent pool for caching component previews across routes */}
+          <div
+            id="fd-persistent-preview-pool"
+            style={{ display: "none" }}
+            aria-hidden="true"
+          />
+          <SiteNavbar />
+          {children}
+        </RootProvider>
       </body>
     </html>
   );
