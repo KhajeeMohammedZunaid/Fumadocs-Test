@@ -44,7 +44,6 @@ export default function RootDocsLayout({ children }: { children: ReactNode }) {
       sidebar={sidebarConfig}
       searchToggle={searchToggleConfig}
       themeSwitch={themeSwitchConfig}
-      disableSearch
     >
       {/* Persistent pool for caching component previews across client-side navigations with zero reloads */}
       <div

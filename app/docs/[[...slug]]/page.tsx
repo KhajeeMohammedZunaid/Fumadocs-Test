@@ -64,6 +64,7 @@ const mdxComponents = {
 
 interface PageProps {
   params: Promise<{ slug?: string[] }>;
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export default async function Page({ params }: PageProps) {
