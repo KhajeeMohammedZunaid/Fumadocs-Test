@@ -1,16 +1,23 @@
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import type { ReactNode } from "react";
 import { source } from "@/lib/source";
+import { DocsMobileHeader } from "@/components/docs-mobile-header";
+import { SidebarHoverEffect } from "@/components/sidebar-hover-effect";
+import { LayoutModeController } from "@/components/layout-mode-controller";
 
 // Hoist static layout configuration to module level (Vercel best practice: server-hoist-static-io)
 const navConfig = {
-  title: "Component Library",
+  component: <DocsMobileHeader />,
 };
 
 const navLinks = [
   {
     text: "Home",
     url: "/",
+  },
+  {
+    text: "Components",
+    url: "/docs/components",
   },
 ];
 
@@ -20,6 +27,14 @@ const sidebarConfig = {
   collapsible: false,
 };
 
+const searchToggleConfig = {
+  enabled: false,
+};
+
+const themeSwitchConfig = {
+  enabled: false,
+};
+
 export default function RootDocsLayout({ children }: { children: ReactNode }) {
   return (
     <DocsLayout
@@ -27,7 +42,18 @@ export default function RootDocsLayout({ children }: { children: ReactNode }) {
       nav={navConfig}
       links={navLinks}
       sidebar={sidebarConfig}
+      searchToggle={searchToggleConfig}
+      themeSwitch={themeSwitchConfig}
+      disableSearch
     >
+      {/* Persistent pool for caching component previews across client-side navigations with zero reloads */}
+      <div
+        id="fd-persistent-preview-pool"
+        style={{ display: "none" }}
+        aria-hidden="true"
+      />
+      <SidebarHoverEffect />
+      <LayoutModeController />
       {children}
     </DocsLayout>
   );
