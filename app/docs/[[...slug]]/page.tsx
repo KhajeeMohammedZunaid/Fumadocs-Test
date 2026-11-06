@@ -25,14 +25,26 @@ import {
   StuxButtonStudio,
   StuxButtonCodeViewer,
 } from "@/components/stux-button";
+import {
+  ComponentsGallery,
+  ComponentCard,
+} from "@/components/components-gallery";
 import { CustomPre } from "@/components/custom-pre";
 import { PropsTable } from "@/components/props-table";
+import { CliInstallation } from "@/components/cli-installation";
+import {
+  ComponentPreview,
+  UniversalPreviewFrame,
+} from "@/components/component-preview";
 
 // Hoist static MDX components to module level (Vercel best practice: server-hoist-static-io & rerender-no-inline-components)
 const mdxComponents = {
   ...defaultMdxComponents,
   pre: CustomPre,
   PropsTable,
+  CliInstallation,
+  ComponentPreview,
+  UniversalPreviewFrame,
   Tab,
   Tabs,
   Files,
@@ -46,6 +58,8 @@ const mdxComponents = {
   StuxButton,
   StuxButtonStudio,
   StuxButtonCodeViewer,
+  ComponentsGallery,
+  ComponentCard,
 };
 
 interface PageProps {
@@ -58,12 +72,24 @@ export default async function Page({ params }: PageProps) {
   if (!page) notFound();
 
   const MDX = page.data.body;
+  const isComponentsPage = slug?.length === 1 && slug[0] === "components";
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <DocsPage
+      toc={isComponentsPage ? [] : page.data.toc}
+      full={isComponentsPage ? true : page.data.full}
+      tableOfContent={isComponentsPage ? { enabled: false } : { enabled: true }}
+      className={
+        isComponentsPage
+          ? "max-w-none w-full !max-w-full px-4 sm:px-6 md:px-8 py-6"
+          : undefined
+      }
+    >
       <DocsTitle>{page.data.title}</DocsTitle>
-      <DocsDescription>{page.data.description}</DocsDescription>
-      <DocsBody>
+      {page.data.description ? (
+        <DocsDescription>{page.data.description}</DocsDescription>
+      ) : null}
+      <DocsBody className={isComponentsPage ? "max-w-none w-full !max-w-full" : undefined}>
         <MDX components={mdxComponents} />
       </DocsBody>
     </DocsPage>
