@@ -86,6 +86,26 @@ const customCodeLightTheme: { [key: string]: React.CSSProperties } = {
   },
 };
 
+const SYNTAX_CUSTOM_STYLE: React.CSSProperties = {
+  margin: 0,
+  padding: "16px 18px",
+  background: "transparent",
+  backgroundColor: "transparent",
+  fontSize: "14px",
+  lineHeight: "24px",
+  fontFamily: CODE_FONT_FAMILY,
+  minWidth: "100%",
+};
+
+const CODE_TAG_PROPS = {
+  style: {
+    fontFamily: CODE_FONT_FAMILY,
+    fontSize: "14px",
+    lineHeight: "24px",
+    background: "transparent",
+  },
+};
+
 function getSyntaxLanguage(fileName: string): string {
   if (fileName.endsWith(".tsx")) return "tsx";
   if (fileName.endsWith(".ts")) return "typescript";
@@ -469,24 +489,8 @@ export function UniversalFileTree({
                   style={isDark ? customCodeDarkTheme : customCodeLightTheme}
                   showLineNumbers={false}
                   wrapLines={false}
-                  customStyle={{
-                    margin: 0,
-                    padding: "16px 18px",
-                    background: "transparent",
-                    backgroundColor: "transparent",
-                    fontSize: "14px",
-                    lineHeight: "24px",
-                    fontFamily: CODE_FONT_FAMILY,
-                    minWidth: "100%",
-                  }}
-                  codeTagProps={{
-                    style: {
-                      fontFamily: CODE_FONT_FAMILY,
-                      fontSize: "14px",
-                      lineHeight: "24px",
-                      background: "transparent",
-                    },
-                  }}
+                  customStyle={SYNTAX_CUSTOM_STYLE}
+                  codeTagProps={CODE_TAG_PROPS}
                 >
                   {activeFile.code}
                 </SyntaxHighlighter>
