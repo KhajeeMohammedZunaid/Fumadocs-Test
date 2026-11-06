@@ -53,6 +53,7 @@
 }
 
 :root {
+  --fd-banner-height: 0px;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -248,6 +249,7 @@
    - On mobile & tablet (< 1280px): Native single-column/fluid layout with sheet drawer
    ========================================================================= */
 
+/* Base documentation layout rules */
 [data-layout-main] {
   width: 100% !important;
   max-width: 100% !important;
@@ -261,31 +263,174 @@
   min-width: 0 !important;
 }
 
-/* Desktop Only: Custom wide columns & docked TOC on screens >= 1280px */
-@media (min-width: 1280px) {
+/* Documentation layout offset beneath sticky SiteNavbar (Desktop only, 0px on mobile) */
+@media (min-width: 768px) {
   :root {
-    --fd-layout-width: 100% !important;
-    --fd-toc-width: 220px !important;
-    --fd-sidebar-width: 268px !important;
+    --fd-banner-height: 3.5rem !important;
   }
 
   #nd-docs-layout {
-    --fd-layout-width: 100% !important;
-    --fd-toc-width: 220px !important;
-    --fd-sidebar-width: 268px !important;
-    --fd-sidebar-col: var(--fd-sidebar-width, 268px) !important;
-    grid-template-columns: 0px var(--fd-sidebar-col, 268px) minmax(0, 1fr) var(--fd-toc-width, 220px) 1.75rem !important;
+    min-height: calc(100dvh - 3.5rem) !important;
   }
 
-  #nd-toc {
+  [data-sidebar-placeholder] {
+    top: 3.5rem !important;
+    height: calc(100dvh - 3.5rem) !important;
+  }
+
+  aside#nd-sidebar,
+  #nd-sidebar {
+    top: 0 !important;
+    height: 100% !important;
+  }
+
+  /* Eliminate excessive default top padding (56px) beneath top navbar */
+  #nd-page,
+  article#nd-page,
+  [data-layout-content] {
+    padding-top: 1.25rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  #nd-toc,
+  aside#nd-toc {
+    top: 3.5rem !important;
+    height: calc(100dvh - 3.5rem) !important;
+    padding-top: 1.25rem !important;
+  }
+}
+
+/* Full-width layout for pages with components-gallery (removes right TOC void completely on all screen sizes) */
+@media (min-width: 768px) {
+  :root {
+    --fd-sidebar-width: 236px !important;
+    --fd-sidebar-col: 236px !important;
+  }
+
+  #nd-docs-layout {
+    --fd-sidebar-width: 236px !important;
+    --fd-sidebar-col: 236px !important;
+  }
+
+  [data-sidebar-placeholder],
+  #nd-sidebar,
+  aside#nd-sidebar {
+    --fd-sidebar-width: 236px !important;
+  }
+
+  #nd-docs-layout[data-gallery-page="true"],
+  html[data-gallery-page="true"] #nd-docs-layout {
+    grid-template-columns: 0px var(--fd-sidebar-col, 236px) minmax(0, 1fr) 0px 0px !important;
+  }
+
+  #nd-docs-layout[data-gallery-page="true"] [data-layout-main],
+  html[data-gallery-page="true"] [data-layout-main] {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    justify-items: stretch !important;
+  }
+
+  #nd-docs-layout[data-gallery-page="true"] article,
+  #nd-docs-layout[data-gallery-page="true"] #nd-page,
+  #nd-docs-layout[data-gallery-page="true"] [data-layout-content],
+  #nd-docs-layout[data-gallery-page="true"] .prose,
+  html[data-gallery-page="true"] article,
+  html[data-gallery-page="true"] #nd-page,
+  html[data-gallery-page="true"] [data-layout-content],
+  html[data-gallery-page="true"] .prose {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #nd-docs-layout[data-gallery-page="true"] #nd-toc,
+  #nd-docs-layout[data-gallery-page="true"] aside#nd-toc,
+  html[data-gallery-page="true"] #nd-toc,
+  html[data-gallery-page="true"] aside#nd-toc {
+    display: none !important;
+    width: 0px !important;
+    max-width: 0px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Desktop & Laptop layout: Ensure docked TOC ("On this page") is permanently visible for all screens >= 1024px */
+@media (min-width: 1024px) {
+  :root {
+    --fd-layout-width: 100% !important;
+    --fd-toc-width: 220px !important;
+    --fd-sidebar-width: 236px !important;
+  }
+
+  /* Docked 4-column layout on all documentation pages (when not in gallery mode) */
+  #nd-docs-layout:not([data-gallery-page="true"]) {
+    --fd-layout-width: 100% !important;
+    --fd-toc-width: 220px !important;
+    --fd-sidebar-width: 236px !important;
+    --fd-sidebar-col: var(--fd-sidebar-width, 236px) !important;
+    grid-template-columns: 0px var(--fd-sidebar-col, 236px) minmax(0, 1fr) var(--fd-toc-width, 220px) 1.5rem !important;
+  }
+
+  /* Force "On this page" TOC to stay persistently visible without disappearing */
+  #nd-docs-layout:not([data-gallery-page="true"]) #nd-toc,
+  #nd-docs-layout:not([data-gallery-page="true"]) aside#nd-toc {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
     width: var(--fd-toc-width, 220px) !important;
     max-width: var(--fd-toc-width, 220px) !important;
+    min-width: var(--fd-toc-width, 220px) !important;
     justify-self: start !important;
     margin-right: auto !important;
     margin-left: 0 !important;
     padding-right: 1rem !important;
     padding-left: 0.5rem !important;
   }
+}
+
+/* Remove Zuris text / header on left sidebar and push Home and all items to the very top */
+#nd-sidebar > div.flex.flex-col:first-of-type,
+aside#nd-sidebar > div.flex.flex-col:first-of-type,
+#nd-sidebar a.inline-flex.text-\[0\.9375rem\],
+aside#nd-sidebar a.inline-flex.text-\[0\.9375rem\] {
+  display: none !important;
+}
+
+/* Mobile docs subnav header: Clean link appearance for brand lockup */
+#nd-subnav a {
+  text-decoration: none !important;
+}
+
+#nd-sidebar [data-radix-scroll-area-viewport],
+aside#nd-sidebar [data-radix-scroll-area-viewport] {
+  padding-top: 1.25rem !important;
+}
+
+/* Permanently remove search bar on left sidebar */
+#nd-sidebar [data-search-full],
+#nd-sidebar button[data-search],
+#nd-sidebar button[aria-label*="Search"],
+#nd-sidebar button:has(svg.lucide-search),
+aside#nd-sidebar [data-search-full],
+aside#nd-sidebar button[data-search] {
+  display: none !important;
+}
+
+/* Permanently remove bottom theme switcher on left sidebar */
+#nd-sidebar [data-theme-toggle],
+aside#nd-sidebar [data-theme-toggle],
+#nd-sidebar [aria-label*="Toggle Theme"],
+aside#nd-sidebar [aria-label*="Toggle Theme"],
+#nd-sidebar div.flex.flex-col:has([data-theme-toggle]),
+aside#nd-sidebar div.flex.flex-col:has([data-theme-toggle]),
+#nd-sidebar div.flex.flex-col:has([aria-label*="Toggle Theme"]),
+aside#nd-sidebar div.flex.flex-col:has([aria-label*="Toggle Theme"]),
+#nd-sidebar div.flex.flex-col:last-child:has(button),
+aside#nd-sidebar div.flex.flex-col:last-child:has(button) {
+  display: none !important;
 }
 
 /* Ensure the left documentation sidebar displays its scrollfade mask and persistent scrollbar */
@@ -341,6 +486,96 @@ aside#nd-sidebar [data-radix-scroll-area-scrollbar][data-state="hidden"] [data-r
 #nd-sidebar [data-radix-scroll-area-thumb]:hover,
 aside#nd-sidebar [data-radix-scroll-area-thumb]:hover {
   opacity: 1 !important;
+}
+
+/* =========================================================================
+   Smooth, clean motion & hover transitions for sidebar navigation and TOC:
+   - Eliminates abrupt hover:transition-none pop-ins
+   - Provides silky smooth, fluid easing when cursor moves across items
+   - Rich opacity backdrop box on hover & active states
+   - Animated gliding pill physically moves between items on hover
+   ========================================================================= */
+.sidebar-hover-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transform: translate3d(0, 0, 0);
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+              width 180ms cubic-bezier(0.16, 1, 0.3, 1),
+              height 180ms cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 140ms ease-out !important;
+  will-change: transform, width, height, opacity;
+}
+
+.dark .sidebar-hover-pill {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+:root:not(.dark) .sidebar-hover-pill {
+  background-color: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+/* Gliding pill provides the background; suppress static background on hover for fluid motion */
+#nd-sidebar a:hover:not([data-active="true"]),
+#nd-sidebar button:hover:not([data-active="true"]),
+#nd-sidebar [data-item]:hover:not([data-active="true"]),
+#nd-sidebar [role="button"]:hover:not([data-active="true"]),
+#nd-toc a:hover {
+  background-color: transparent !important;
+}
+
+#nd-sidebar a,
+#nd-sidebar button,
+#nd-sidebar [data-item],
+#nd-sidebar [role="button"],
+#nd-sidebar [data-active],
+#nd-toc a,
+#nd-toc [data-item] {
+  position: relative;
+  z-index: 10;
+  transition: color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 180ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: color, opacity;
+}
+
+.dark #nd-sidebar a:hover:not([data-active="true"]),
+.dark #nd-sidebar button:hover:not([data-active="true"]) {
+  color: rgba(255, 255, 255, 0.96) !important;
+}
+
+:root:not(.dark) #nd-sidebar a:hover:not([data-active="true"]),
+:root:not(.dark) #nd-sidebar button:hover:not([data-active="true"]) {
+  color: rgba(0, 0, 0, 0.95) !important;
+}
+
+.dark #nd-sidebar a[data-active="true"],
+.dark #nd-sidebar button[data-active="true"] {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+:root:not(.dark) #nd-sidebar a[data-active="true"],
+:root:not(.dark) #nd-sidebar button[data-active="true"] {
+  background-color: rgba(0, 0, 0, 0.08) !important;
+  color: #000000 !important;
+}
+
+.dark #nd-toc a:hover {
+  color: rgba(255, 255, 255, 0.95) !important;
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border-radius: 6px !important;
+}
+
+:root:not(.dark) #nd-toc a:hover {
+  color: rgba(0, 0, 0, 0.95) !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  border-radius: 6px !important;
 }
 
 /* Morphing Copy Icon Animation & Touch/Tap Support */
