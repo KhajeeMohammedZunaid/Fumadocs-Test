@@ -15,6 +15,7 @@ const SidebarIcon = (props: React.SVGProps<SVGSVGElement>) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-hidden="true"
     {...props}
   >
     <rect width="18" height="18" x="3" y="3" rx="2" />
@@ -26,7 +27,7 @@ export function DocsMobileHeader() {
   return (
     <header
       id="nd-subnav"
-      className="sticky top-0 z-30 flex h-14 items-center justify-between px-4 sm:px-6 border-b border-border/80 bg-background/85 backdrop-blur-md md:hidden transition-colors"
+      className="[grid-area:header] sticky top-(--fd-docs-row-1) z-30 flex h-14 w-full items-center justify-between px-4 sm:px-6 border-b border-border/80 bg-background/85 backdrop-blur-md md:hidden max-md:layout:[--fd-header-height:--spacing(14)] transition-colors"
     >
       <Link
         href="/"
@@ -35,10 +36,12 @@ export function DocsMobileHeader() {
         <ZurisBrand />
       </Link>
 
-      <SidebarTrigger className="inline-flex size-8 items-center justify-center rounded-lg border border-border/60 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0">
+      <SidebarTrigger
+        aria-label="Toggle navigation menu"
+        className="inline-flex size-9 items-center justify-center rounded-lg border border-border/60 bg-transparent hover:bg-zinc-100 dark:hover:bg-zinc-800 text-muted-foreground hover:text-foreground transition-colors cursor-pointer shrink-0"
+      >
         <SidebarIcon className="size-4 shrink-0" />
       </SidebarTrigger>
     </header>
   );
 }
-
