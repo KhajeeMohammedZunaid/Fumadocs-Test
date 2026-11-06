@@ -11,15 +11,9 @@ export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const mobileBtnRef = React.useRef<HTMLButtonElement>(null);
   const overlayRef = React.useRef<HTMLDivElement>(null);
-  const focusTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   React.useEffect(() => {
     setMounted(true);
-    return () => {
-      // Ensure body scroll lock is always restored on unmount
-      document.body.classList.remove("overflow-hidden");
-      if (focusTimerRef.current) clearTimeout(focusTimerRef.current);
-    };
   }, []);
 
   const toggleTheme = React.useCallback(() => {
@@ -29,8 +23,7 @@ export function Navbar() {
   const openMenu = React.useCallback(() => {
     setIsMenuOpen(true);
     document.body.classList.add("overflow-hidden");
-    if (focusTimerRef.current) clearTimeout(focusTimerRef.current);
-    focusTimerRef.current = setTimeout(() => {
+    setTimeout(() => {
       const firstFocusable = overlayRef.current?.querySelector<HTMLElement>("a, button");
       firstFocusable?.focus();
     }, 60);
@@ -69,7 +62,7 @@ export function Navbar() {
         document.body.classList.remove("overflow-hidden");
       }
     };
-    window.addEventListener("resize", handleResize, { passive: true });
+    window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [isMenuOpen]);
 
@@ -190,8 +183,7 @@ export function Navbar() {
         <div className="flex items-center justify-start justify-self-start flex-shrink-0">
           <a
             href="#"
-            onClick={(e) => e.preventDefault()}
-            className="flex items-center gap-2 xs:gap-2.5 md:gap-2.5 lg:gap-3 4k:gap-4 font-sans text-[1.08rem] xs:text-[1.15rem] sm:text-[1.18rem] md:text-[1.22rem] lg:text-[1.28rem] 4k:text-[1.58rem] font-medium tracking-tight text-zinc-950 dark:text-zinc-50 no-underline whitespace-nowrap select-none cursor-pointer"
+            className="flex items-center gap-2 xs:gap-2.5 md:gap-2.5 lg:gap-3 4k:gap-4 font-sans text-[1.08rem] xs:text-[1.15rem] sm:text-[1.18rem] md:text-[1.22rem] lg:text-[1.28rem] 4k:text-[1.58rem] font-medium tracking-tight text-zinc-950 dark:text-zinc-50 no-underline whitespace-nowrap select-none"
           >
             <svg
               className="w-[21px] h-[21px] xs:w-[23px] xs:h-[23px] sm:w-[24px] sm:h-[24px] md:w-[24px] md:h-[24px] lg:w-[26px] lg:h-[26px] 4k:w-[33px] 4k:h-[33px] flex-shrink-0"

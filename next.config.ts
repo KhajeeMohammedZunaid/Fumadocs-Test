@@ -5,7 +5,7 @@ const withMDX = createMDX();
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: [
-    '192.168.0.106'
+    '192.168.0.107'
   ],
   cacheComponents: true,
   experimental: {
