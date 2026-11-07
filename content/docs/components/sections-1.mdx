@@ -1,0 +1,38 @@
+---
+title: Sections 1
+description: Editorial & AI Studio Landing Showcase featuring a 360-degree circular marquee stamp badge, stacked social proof cards, an interactive skills cluster, and fluid typography.
+---
+
+## Live Preview
+
+<HeroPreviewFrame src="/preview/sections-1" title="Sections 1" />
+
+---
+
+## Installation
+
+<CliInstallation
+  componentName="sections-1"
+  dependencies="motion"
+>
+  <Sections1FileTree />
+</CliInstallation>
+
+---
+
+## Full Page Usage
+
+Import and assemble the layout in your page:
+
+```tsx
+import { Sections1 } from "@/components/sections-1";
+
+export default function Sections1ShowcasePage() {
+  return (
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text-main)] transition-colors duration-300">
+      <Sections1 showThemeBar={true} />
+    </div>
+  );
+}
+```
+
