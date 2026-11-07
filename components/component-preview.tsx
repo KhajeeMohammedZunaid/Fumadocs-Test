@@ -267,7 +267,10 @@ export function ComponentPreview({
       <div
         ref={containerRef}
         className={cn(
-          "flex items-center justify-center p-2 sm:p-6 bg-zinc-100/50 dark:bg-zinc-950/50 min-h-[420px] sm:min-h-[580px] overflow-hidden w-full max-w-full",
+          "flex items-center justify-center overflow-hidden w-full max-w-full",
+          device === "desktop"
+            ? "p-0 bg-background"
+            : "p-2 sm:p-6 bg-zinc-100/50 dark:bg-zinc-950/50 min-h-[420px] sm:min-h-[580px]",
           containerClassName
         )}
       >
@@ -282,7 +285,12 @@ export function ComponentPreview({
           }}
           onAnimationStart={() => setIsAnimating(true)}
           onAnimationComplete={() => setIsAnimating(false)}
-          className="mx-auto rounded-lg overflow-hidden border border-zinc-200/80 dark:border-zinc-800 shadow-sm bg-white dark:bg-black min-w-0"
+          className={cn(
+            "mx-auto overflow-hidden min-w-0 w-full",
+            device === "desktop"
+              ? "rounded-none border-0 shadow-none bg-background"
+              : "rounded-lg border border-zinc-200/80 dark:border-zinc-800 shadow-sm bg-white dark:bg-black"
+          )}
           style={{
             maxWidth: "100%",
           }}
@@ -291,7 +299,7 @@ export function ComponentPreview({
             <div
               ref={previewMountRef}
               className={cn(
-                "w-full h-[500px] sm:h-[620px] border-0 block bg-background",
+                "w-full h-[500px] sm:h-[620px] border-0 block bg-background no-scrollbar",
                 height
               )}
             />
@@ -299,7 +307,7 @@ export function ComponentPreview({
             <div
               key={key}
               className={cn(
-                "w-full min-h-[350px] p-6 sm:p-10 flex items-center justify-center bg-background overflow-auto",
+                "w-full min-h-[350px] p-6 sm:p-10 flex items-center justify-center bg-background overflow-auto no-scrollbar",
                 height
               )}
             >

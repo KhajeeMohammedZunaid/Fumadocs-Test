@@ -116,6 +116,66 @@ export function ComponentsGallery() {
             </StuxButton>
           </div>
         </UniversalComponentCard>
+
+        {/* Sections 1 */}
+        <UniversalComponentCard
+          name="Sections 1"
+          href="/docs/components/sections-1"
+        >
+          <div className="absolute inset-0 overflow-hidden bg-[#fafafa] dark:bg-[#09090b]">
+            <CachedPreview
+              id="sections-1"
+              src="/preview/sections-1"
+              title="Sections 1"
+            />
+            <div className="absolute inset-0 z-10 cursor-pointer" />
+          </div>
+        </UniversalComponentCard>
+
+        {/* Sections 2 */}
+        <UniversalComponentCard
+          name="Sections 2"
+          href="/docs/components/sections-2"
+        >
+          <div className="absolute inset-0 overflow-hidden bg-[#f8f9fb] dark:bg-[#09090b]">
+            <CachedPreview
+              id="sections-2"
+              src="/preview/sections-2"
+              title="Sections 2"
+            />
+            <div className="absolute inset-0 z-10 cursor-pointer" />
+          </div>
+        </UniversalComponentCard>
+
+        {/* Sections 3 */}
+        <UniversalComponentCard
+          name="Sections 3"
+          href="/docs/components/sections-3"
+        >
+          <div className="absolute inset-0 overflow-hidden bg-white dark:bg-[#09090b]">
+            <CachedPreview
+              id="sections-3"
+              src="/preview/sections-3"
+              title="Sections 3"
+            />
+            <div className="absolute inset-0 z-10 cursor-pointer" />
+          </div>
+        </UniversalComponentCard>
+
+        {/* Testimonials 1 */}
+        <UniversalComponentCard
+          name="Testimonials 1"
+          href="/docs/components/testimonials-1"
+        >
+          <div className="absolute inset-0 overflow-hidden bg-[#fcfcfd] dark:bg-[#08090a]">
+            <CachedPreview
+              id="testimonials-1"
+              src="/preview/testimonials-1"
+              title="Testimonials 1"
+            />
+            <div className="absolute inset-0 z-10 cursor-pointer" />
+          </div>
+        </UniversalComponentCard>
       </div>
     </div>
   );
