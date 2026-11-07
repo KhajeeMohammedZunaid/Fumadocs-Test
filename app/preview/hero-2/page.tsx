@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function Hero2Page() {
   return (
-    <main className="w-full h-screen h-[100dvh] overflow-hidden bg-white dark:bg-[#09090b]">
+    <main className="w-full h-screen h-[100dvh] overflow-hidden bg-white dark:bg-[#09090b] no-scrollbar">
       <ScrollArea className="w-full h-full">
         <Hero2 />
       </ScrollArea>
