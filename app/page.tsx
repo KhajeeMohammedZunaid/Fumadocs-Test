@@ -3,6 +3,7 @@ import { HomeLayout } from "fumadocs-ui/layouts/home";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { baseNavLinks } from "@/lib/layout-config";
+import { PageTransition } from "@/components/page-transition";
 
 const searchToggleConfig = {
   enabled: false,
@@ -21,7 +22,7 @@ export default async function Home() {
       searchToggle={searchToggleConfig}
     >
       <main className="flex flex-1 flex-col items-center justify-center p-8 text-center sm:p-24">
-        <div className="max-w-2xl space-y-6">
+        <PageTransition className="max-w-2xl space-y-6">
           <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs text-muted-foreground">
             <span>Powered by Fumadocs &amp; Base UI</span>
           </div>
@@ -62,7 +63,7 @@ export default async function Home() {
               <Button variant="destructive">Destructive</Button>
             </div>
           </div>
-        </div>
+        </PageTransition>
       </main>
     </HomeLayout>
   );
