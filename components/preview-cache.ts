@@ -19,7 +19,7 @@ export function getDetailPreviewIframe(
     iframe.src = src;
     iframe.title = title || "Component Preview";
     iframe.loading = "eager";
-    iframe.className = "w-full h-[500px] sm:h-[620px] border-0 block bg-background";
+    iframe.className = "w-full h-[500px] sm:h-[620px] border-0 block bg-background no-scrollbar";
     detailPreviewCache.set(src, iframe);
   }
 
@@ -42,7 +42,7 @@ export function preloadDetailPreview(src: string, title?: string) {
     iframe.title = title || "Component Preview";
     iframe.loading = "eager";
     iframe.tabIndex = -1;
-    iframe.className = "w-full h-[500px] sm:h-[620px] border-0 block bg-background";
+    iframe.className = "w-full h-[500px] sm:h-[620px] border-0 block bg-background no-scrollbar";
     detailPreviewCache.set(src, iframe);
     pool.appendChild(iframe);
   } else if (iframe.parentElement !== pool && !iframe.parentElement) {

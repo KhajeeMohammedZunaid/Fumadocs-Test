@@ -7,7 +7,7 @@ import * as React from "react";
 const previewDOMCache = new Map<string, HTMLIFrameElement>();
 
 const DEFAULT_IFRAME_CLASS =
-  "w-[200%] h-[200%] border-0 origin-top-left transform scale-[0.5] pointer-events-none select-none";
+  "w-[200%] h-[200%] border-0 origin-top-left transform scale-[0.5] pointer-events-none select-none no-scrollbar";
 
 interface CachedPreviewProps {
   id: string;
