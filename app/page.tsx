@@ -2,7 +2,7 @@ import Link from "next/link";
 import { HomeLayout } from "fumadocs-ui/layouts/home";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { baseNavConfig, baseNavLinks } from "@/lib/layout-config";
+import { baseNavLinks } from "@/lib/layout-config";
 
 const searchToggleConfig = {
   enabled: false,
