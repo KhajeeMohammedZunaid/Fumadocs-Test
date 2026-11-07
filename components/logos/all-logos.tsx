@@ -1,6 +1,6 @@
 import { OpenAI } from "./openai";
 import { Anthropic } from "./anthropic";
-import { Replicate } from "./relicate";
+import { Replicate } from "./replicate";
 import { GitHub } from "./github";
 import { Vercel } from "./vercel";
 import { Grok } from "./grok";
