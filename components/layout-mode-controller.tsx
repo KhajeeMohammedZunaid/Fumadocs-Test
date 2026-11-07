@@ -15,6 +15,8 @@ export function LayoutModeController() {
     const layout = document.getElementById("nd-docs-layout");
     const root = document.documentElement;
 
+    root.setAttribute("data-docs-layout", "true");
+
     if (isGallery) {
       layout?.setAttribute("data-gallery-page", "true");
       root.setAttribute("data-gallery-page", "true");
@@ -22,8 +24,13 @@ export function LayoutModeController() {
       layout?.removeAttribute("data-gallery-page");
       root.removeAttribute("data-gallery-page");
     }
+
+    return () => {
+      root.removeAttribute("data-docs-layout");
+    };
   }, [isGallery]);
 
   return null;
 }
+
 

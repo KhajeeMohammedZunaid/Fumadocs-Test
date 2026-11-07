@@ -6,6 +6,10 @@ import { preloadDetailPreview } from "./preview-cache";
 const PRELOAD_TARGETS = [
   { src: "/preview/hero-1", title: "Hero Section 1" },
   { src: "/preview/hero-2", title: "Hero Section 2" },
+  { src: "/preview/sections-1", title: "Sections 1" },
+  { src: "/preview/sections-2", title: "Sections 2" },
+  { src: "/preview/sections-3", title: "Sections 3" },
+  { src: "/preview/testimonials-1", title: "Testimonials 1" },
 ];
 
 /**
@@ -26,4 +30,3 @@ export function PreviewPreloader() {
 
   return null;
 }
-
