@@ -1,0 +1,43 @@
+---
+title: Testimonials 1
+description: Linear-inspired multi-tone testimonial cards with custom SVG quotation marks, watermark brand logos, dual/trio layout variants, and hidden scrollbars.
+---
+
+## Live Preview
+
+<HeroPreviewFrame src="/preview/testimonials-1" title="Testimonials 1" />
+
+---
+
+## Installation
+
+<CliInstallation
+  componentName="testimonials-1"
+  dependencies="motion"
+>
+  <Testimonials1FileTree />
+</CliInstallation>
+
+---
+
+## Full Page Usage
+
+Import and assemble the layout in your page:
+
+```tsx
+"use client";
+
+import * as React from "react";
+import { Testimonials1 } from "@/components/testimonials-1";
+
+export default function TestimonialsPage() {
+  const [variant, setVariant] = React.useState<"trio" | "dual">("trio");
+
+  return (
+    <main className="min-h-screen w-full bg-[#fcfcfd] dark:bg-[#08090a] text-zinc-950 dark:text-zinc-50 flex flex-col items-center justify-center relative py-12">
+      <Testimonials1 variant={variant} />
+    </main>
+  );
+}
+```
+
