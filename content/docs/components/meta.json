@@ -1,5 +1,14 @@
 {
   "title": "Components",
   "defaultOpen": true,
-  "pages": ["!index", "hero", "hero-section-2", "button"]
+  "pages": [
+    "!index",
+    "hero",
+    "hero-section-2",
+    "button",
+    "sections-1",
+    "sections-2",
+    "sections-3",
+    "testimonials-1"
+  ]
 }
