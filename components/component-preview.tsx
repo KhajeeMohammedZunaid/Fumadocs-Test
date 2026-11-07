@@ -20,6 +20,7 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { getDetailPreviewIframe } from "@/components/preview-cache";
 
 export type DeviceMode = "desktop" | "tablet" | "mobile";
 
@@ -63,6 +64,7 @@ export function ComponentPreview({
   const [isAnimating, setIsAnimating] = React.useState(false);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const previewMountRef = React.useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = React.useState<number>(1200);
 
   // Measure available content width accurately (excluding padding)
@@ -94,6 +96,52 @@ export function ComponentPreview({
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  // Persistent preview iframe attachment & caching across client navigations
+  React.useEffect(() => {
+    if (!src) return;
+    const mountPoint = previewMountRef.current;
+    if (!mountPoint) return;
+
+    const iframe = getDetailPreviewIframe(src, title);
+    if (!iframe) return;
+
+    if (height) {
+      iframe.className = cn(
+        "w-full h-[500px] sm:h-[620px] border-0 block bg-background",
+        height
+      );
+    }
+    iframe.style.pointerEvents = isAnimating ? "none" : "auto";
+
+    // Attach iframe to this mount point if not already inside
+    if (iframe.parentElement !== mountPoint) {
+      mountPoint.appendChild(iframe);
+    }
+
+    return () => {
+      // On unmount (e.g. navigating to another component), preserve the iframe in the persistent layout pool
+      // so it stays alive in DOM without reloading or re-fetching
+      const pool = document.getElementById("fd-persistent-preview-pool");
+      if (pool && iframe && iframe.parentElement === mountPoint) {
+        pool.appendChild(iframe);
+      }
+    };
+  }, [src, title, height, key, isAnimating]);
+
+  const handleReload = React.useCallback(() => {
+    if (src) {
+      const iframe = getDetailPreviewIframe(src, title);
+      if (iframe) {
+        try {
+          iframe.contentWindow?.location.reload();
+        } catch {
+          iframe.src = src;
+        }
+      }
+    }
+    setKey((k) => k + 1);
+  }, [src, title]);
 
   // Compute animated numerical width in pixels so motion/react animates smoothly with zero unit mismatch
   const targetWidth = React.useMemo(() => {
@@ -192,7 +240,7 @@ export function ComponentPreview({
           {/* Reload / Reset Preview Button */}
           <button
             type="button"
-            onClick={() => setKey((k) => k + 1)}
+            onClick={handleReload}
             title="Reload preview"
             className="p-1.5 rounded-md text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
           >
@@ -215,7 +263,7 @@ export function ComponentPreview({
         </div>
       </div>
 
-      {/* Frame Container with smooth motion/react monotonic ease-out animation (no breakpoint bounce) */}
+      {/* Frame Container with smooth motion/react monotonic ease-out animation */}
       <div
         ref={containerRef}
         className={cn(
@@ -240,18 +288,12 @@ export function ComponentPreview({
           }}
         >
           {src ? (
-            <iframe
-              key={key}
-              src={src}
-              title={title}
+            <div
+              ref={previewMountRef}
               className={cn(
                 "w-full h-[500px] sm:h-[620px] border-0 block bg-background",
                 height
               )}
-              style={{
-                pointerEvents: isAnimating ? "none" : "auto",
-              }}
-              loading="lazy"
             />
           ) : (
             <div
@@ -273,4 +315,3 @@ export function ComponentPreview({
 // Global Aliases for universal compatibility across all component docs
 export { ComponentPreview as UniversalPreviewFrame };
 export { ComponentPreview as HeroPreviewFrame };
-
