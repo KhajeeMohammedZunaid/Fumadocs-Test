@@ -1,0 +1,43 @@
+---
+title: Sections 3
+description: Horizontal expanding cloud architecture accordion engineered with interactive hover physics, asset preloading, and responsive auto-collapse.
+---
+
+## Live Preview
+
+<HeroPreviewFrame src="/preview/sections-3" title="Sections 3" />
+
+---
+
+## Installation
+
+<CliInstallation
+  componentName="sections-3"
+  dependencies="motion"
+>
+  <Sections3FileTree />
+</CliInstallation>
+
+---
+
+## Full Page Usage
+
+Import and assemble the layout in your page:
+
+```tsx
+import { Sections3 } from "@/components/sections-3";
+
+export const metadata = {
+  title: "Sections 3 | Component Library",
+  description: "Cloud & SaaS horizontal expanding interactive accordion section",
+};
+
+export default function Sections3Page() {
+  return (
+    <main className="min-h-screen bg-white">
+      <Sections3 />
+    </main>
+  );
+}
+```
+
