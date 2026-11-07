@@ -4,6 +4,7 @@ import { source } from "@/lib/source";
 import { DocsMobileHeader } from "@/components/docs-mobile-header";
 import { SidebarHoverEffect } from "@/components/sidebar-hover-effect";
 import { LayoutModeController } from "@/components/layout-mode-controller";
+import { PreviewPreloader } from "@/components/preview-preloader";
 
 // Hoist static layout configuration to module level (Vercel best practice: server-hoist-static-io)
 const navConfig = {
@@ -46,6 +47,7 @@ export default function RootDocsLayout({ children }: { children: ReactNode }) {
         style={{ display: "none" }}
         aria-hidden="true"
       />
+      <PreviewPreloader />
       <SidebarHoverEffect />
       <LayoutModeController />
       {children}
