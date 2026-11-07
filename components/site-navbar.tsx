@@ -64,8 +64,10 @@ export function SiteNavbar() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 w-full h-14 border-b border-border/80 bg-background/85 backdrop-blur-md transition-colors",
-        isLandingPage ? "block" : "hidden md:block"
+        "sticky top-0 z-50 w-full transition-colors",
+        isLandingPage
+          ? "h-14 block border-b border-border/80 bg-background/85 backdrop-blur-md"
+          : "h-14 lg:h-12 block border-b border-border/80 lg:border-b-0 lg:border-none lg:shadow-none bg-background/85 backdrop-blur-md"
       )}
     >
       <div className="flex h-full items-center justify-between px-4 sm:px-6 w-full">

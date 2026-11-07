@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { RootProvider } from "fumadocs-ui/provider/next";
@@ -7,9 +7,15 @@ import { SiteNavbar } from "@/components/site-navbar";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-sans-inter",
   display: "swap",
   fallback: ["system-ui", "-apple-system", "sans-serif"],
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta-display",
+  display: "swap",
 });
 
 const geistSans = Geist({
@@ -51,7 +57,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         geistSans.variable,
         geistMono.variable,
         "font-sans",
-        inter.variable
+        inter.variable,
+        jakarta.variable
       )}
       suppressHydrationWarning
     >
