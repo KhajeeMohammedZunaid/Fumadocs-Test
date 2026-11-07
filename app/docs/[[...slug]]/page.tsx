@@ -41,6 +41,14 @@ import {
   type ComponentNavTarget,
 } from "@/components/component-navigation";
 import { PageTransition } from "@/components/page-transition";
+import { Sections1FileTree } from "@/components/sections/sections-1-file-tree";
+import { Sections2FileTree } from "@/components/sections/sections-2-file-tree";
+import { Sections3FileTree } from "@/components/sections/sections-3-file-tree";
+import { Testimonials1FileTree } from "@/components/sections/testimonials-1-file-tree";
+import { Sections1 } from "@/components/sections/sections-1";
+import { Sections2 } from "@/components/sections/sections-2";
+import { Sections3 } from "@/components/sections/sections-3";
+import { Testimonials1 } from "@/components/sections/testimonials-1";
 
 // Hoist static MDX components to module level (Vercel best practice: server-hoist-static-io & rerender-no-inline-components)
 const mdxComponents = {
@@ -65,6 +73,14 @@ const mdxComponents = {
   StuxButtonCodeViewer,
   ComponentsGallery,
   ComponentCard,
+  Sections1,
+  Sections1FileTree,
+  Sections2,
+  Sections2FileTree,
+  Sections3,
+  Sections3FileTree,
+  Testimonials1,
+  Testimonials1FileTree,
 };
 
 /**
@@ -160,7 +176,8 @@ export default async function Page({ params }: PageProps) {
     <DocsPage
       toc={isComponentsPage ? [] : page.data.toc}
       full={isComponentsPage ? true : page.data.full}
-      tableOfContent={isComponentsPage ? { enabled: false } : { enabled: true }}
+      tableOfContent={{ enabled: false }}
+      tableOfContentPopover={{ enabled: !isComponentsPage }}
       className={
         isComponentsPage
           ? "max-w-none w-full !max-w-full px-4 sm:px-6 md:px-8 py-6"

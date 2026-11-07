@@ -11,9 +11,11 @@
   --breakpoint-4k: 2000px;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans-inter), 'Inter', sans-serif;
+  --font-body: var(--font-sans-inter), 'Inter', sans-serif;
+  --font-display: var(--font-jakarta-display), 'Plus Jakarta Sans', sans-serif;
+  --font-heading: var(--font-jakarta-display), 'Plus Jakarta Sans', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -126,13 +128,60 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    box-sizing: border-box;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[#fafafa] dark:bg-[#09090b] text-zinc-950 dark:text-zinc-50 font-sans;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
   html {
     @apply font-sans;
+    font-family: var(--font-sans-inter), 'Inter', sans-serif;
   }
+}
+
+/* Scrollbar suppression across all component previews and pages */
+.no-scrollbar::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+/* Ensure all component previews and nested preview frames have no scrollbars */
+iframe.no-scrollbar,
+iframe[data-preview],
+[data-preview-root] {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+iframe.no-scrollbar::-webkit-scrollbar,
+iframe[data-preview]::-webkit-scrollbar,
+[data-preview-root]::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Typography helper classes */
+.font-display {
+  font-family: var(--font-jakarta-display), 'Plus Jakarta Sans',
+    -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.font-sans,
+.font-body {
+  font-family: var(--font-sans-inter), 'Inter',
+    -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* Hero artwork fade */
@@ -357,38 +406,206 @@
   }
 }
 
-/* Desktop & Laptop layout: Ensure docked TOC ("On this page") is permanently visible for all screens >= 1024px */
+/* Desktop layout (>= 1024px): Framed Inset Canvas Architecture (Sketch Implementation) */
 @media (min-width: 1024px) {
   :root {
+    --fd-banner-height: 3rem !important;
     --fd-layout-width: 100% !important;
-    --fd-toc-width: 220px !important;
+    --fd-toc-width: 0px !important;
     --fd-sidebar-width: 236px !important;
   }
 
-  /* Docked 4-column layout on all documentation pages (when not in gallery mode) */
-  #nd-docs-layout:not([data-gallery-page="true"]) {
+  /* Lock viewport scroll on desktop docs routes: only the inner card & sidebar scroll independently */
+  html:has(#nd-docs-layout),
+  body:has(#nd-docs-layout),
+  html[data-docs-layout="true"],
+  html[data-docs-layout="true"] body {
+    overflow: hidden !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+  }
+
+  /* Outer workbench foundation: clean subtle frame canvas behind the floating card */
+  html:has(#nd-docs-layout),
+  body:has(#nd-docs-layout),
+  html[data-docs-layout="true"],
+  html[data-docs-layout="true"] body,
+  #nd-docs-layout:not([data-gallery-page="true"]),
+  #nd-docs-layout {
     --fd-layout-width: 100% !important;
-    --fd-toc-width: 220px !important;
+    --fd-toc-width: 0px !important;
     --fd-sidebar-width: 236px !important;
     --fd-sidebar-col: var(--fd-sidebar-width, 236px) !important;
-    grid-template-columns: 0px var(--fd-sidebar-col, 236px) minmax(0, 1fr) var(--fd-toc-width, 220px) 1.5rem !important;
+    grid-template-columns: 0px var(--fd-sidebar-col, 236px) minmax(0, 1fr) 0px 0px !important;
+    background-color: #ffffff !important;
   }
 
-  /* Force "On this page" TOC to stay persistently visible without disappearing */
-  #nd-docs-layout:not([data-gallery-page="true"]) #nd-toc,
-  #nd-docs-layout:not([data-gallery-page="true"]) aside#nd-toc {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    width: var(--fd-toc-width, 220px) !important;
-    max-width: var(--fd-toc-width, 220px) !important;
-    min-width: var(--fd-toc-width, 220px) !important;
-    justify-self: start !important;
-    margin-right: auto !important;
-    margin-left: 0 !important;
-    padding-right: 1rem !important;
-    padding-left: 0.5rem !important;
+  :is(.dark html:has(#nd-docs-layout)),
+  :is(.dark body:has(#nd-docs-layout)),
+  :is(.dark html[data-docs-layout="true"]),
+  :is(.dark html[data-docs-layout="true"] body),
+  :is(.dark #nd-docs-layout) {
+    background-color: #121215 !important;
   }
+
+  /* Top site header blends seamlessly with the outer shell foundation on desktop documentation pages */
+  body:has(#nd-docs-layout) header.sticky,
+  html[data-docs-layout="true"] header.sticky,
+  body:has(#nd-docs-layout) header,
+  html[data-docs-layout="true"] header {
+    background-color: #ffffff !important;
+    border: none !important;
+    border-bottom: none !important;
+    border-bottom-width: 0 !important;
+    box-shadow: none !important;
+  }
+
+  :is(.dark body:has(#nd-docs-layout) header.sticky),
+  :is(.dark html[data-docs-layout="true"] header.sticky),
+  :is(.dark body:has(#nd-docs-layout) header),
+  :is(.dark html[data-docs-layout="true"] header) {
+    background-color: #121215 !important;
+    border: none !important;
+    border-bottom: none !important;
+    border-bottom-width: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Align left sidebar placeholder & root to match the vertical frame span */
+  [data-sidebar-placeholder] {
+    top: calc(3rem + 0.375rem) !important;
+    height: calc(100dvh - 3.75rem) !important;
+    max-height: calc(100dvh - 3.75rem) !important;
+  }
+
+  aside#nd-sidebar,
+  #nd-sidebar {
+    top: 0 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+  }
+
+  /* Left sidebar rests seamlessly on the outer foundation without harsh vertical borders */
+  #nd-sidebar,
+  aside#nd-sidebar,
+  [data-sidebar-placeholder] aside {
+    background-color: transparent !important;
+    border-right: none !important;
+    border-inline-end: none !important;
+  }
+
+  /* Remove top padding completely from the left sidebar on desktop (align with top of frame) */
+  #nd-sidebar [data-radix-scroll-area-viewport],
+  aside#nd-sidebar [data-radix-scroll-area-viewport],
+  #nd-sidebar [data-radix-scroll-area-viewport] > div,
+  aside#nd-sidebar [data-radix-scroll-area-viewport] > div,
+  #nd-sidebar,
+  aside#nd-sidebar {
+    padding-top: 0px !important;
+    margin-top: 0px !important;
+    padding-bottom: 0.375rem !important;
+  }
+
+  /* Inset Rounded Content Canvas (The Floating Island Card from the sketch) */
+  #nd-docs-layout main[data-layout-main] {
+    margin: 0.375rem 0.75rem 0.375rem 0.5rem !important;
+    border-radius: 14px !important;
+    background-color: #f4f4f6 !important;
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    box-shadow: none !important;
+    height: calc(100dvh - 3.75rem) !important;
+    max-height: calc(100dvh - 3.75rem) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    display: block !important;
+    width: auto !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(0, 0, 0, 0.22) transparent !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  :is(.dark #nd-docs-layout main[data-layout-main]) {
+    background-color: #09090b !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: none !important;
+    scrollbar-color: rgba(255, 255, 255, 0.22) transparent !important;
+  }
+
+  /* Inside the frame keep sleek custom scrollbar */
+  #nd-docs-layout main[data-layout-main]::-webkit-scrollbar {
+    display: block !important;
+    width: 6px !important;
+  }
+
+  #nd-docs-layout main[data-layout-main]::-webkit-scrollbar-track {
+    background: transparent !important;
+    margin-block: 10px !important;
+  }
+
+  #nd-docs-layout main[data-layout-main]::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.22) !important;
+    border-radius: 9999px !important;
+  }
+
+  :is(.dark #nd-docs-layout main[data-layout-main]::-webkit-scrollbar-thumb) {
+    background: rgba(255, 255, 255, 0.22) !important;
+  }
+
+  #nd-docs-layout main[data-layout-main]::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.38) !important;
+  }
+
+  :is(.dark #nd-docs-layout main[data-layout-main]::-webkit-scrollbar-thumb:hover) {
+    background: rgba(255, 255, 255, 0.38) !important;
+  }
+
+  /* Content area inside the rounded canvas: restored normal padding */
+  #nd-docs-layout article#nd-page,
+  #nd-docs-layout [data-layout-content] {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: 100% !important;
+    padding: 2.25rem 2.75rem 4rem 2.75rem !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Permanently eliminate "On this page" right sidebar, trigger, and containers on desktop */
+  #nd-toc,
+  aside#nd-toc,
+  #nd-toc-ring,
+  #nd-toc-placeholder,
+  [data-toc],
+  #toc-title {
+    display: none !important;
+    width: 0px !important;
+    max-width: 0px !important;
+    min-width: 0px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+/* Scroll-fade mask: Smooth vertical dissipation at top and bottom edges (shadcn registry) */
+.scroll-fade,
+.scroll-fade [data-radix-scroll-area-viewport],
+[data-radix-scroll-area-viewport].scroll-fade {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 16px,
+    black calc(100% - 24px),
+    transparent 100%
+  ) !important;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    black 16px,
+    black calc(100% - 24px),
+    transparent 100%
+  ) !important;
 }
 
 /* Remove Zuris text / header on left sidebar and push Home and all items to the very top */
@@ -404,9 +621,11 @@ aside#nd-sidebar a.inline-flex.text-\[0\.9375rem\] {
   text-decoration: none !important;
 }
 
-#nd-sidebar [data-radix-scroll-area-viewport],
-aside#nd-sidebar [data-radix-scroll-area-viewport] {
-  padding-top: 1.25rem !important;
+@media (max-width: 1023px) {
+  #nd-sidebar [data-radix-scroll-area-viewport],
+  aside#nd-sidebar [data-radix-scroll-area-viewport] {
+    padding-top: 1.25rem !important;
+  }
 }
 
 /* Permanently remove search bar on left sidebar */
@@ -434,11 +653,13 @@ aside#nd-sidebar div.flex.flex-col:last-child:has(button) {
 }
 
 /* Ensure the left documentation sidebar displays its scrollfade mask and persistent scrollbar */
-#nd-sidebar,
-aside#nd-sidebar,
-[data-sidebar-placeholder] aside,
-#nd-docs-layout aside#nd-sidebar {
-  background-color: var(--background) !important;
+@media (max-width: 1023px) {
+  #nd-sidebar,
+  aside#nd-sidebar,
+  [data-sidebar-placeholder] aside,
+  #nd-docs-layout aside#nd-sidebar {
+    background-color: var(--background) !important;
+  }
 }
 
 #nd-sidebar [data-radix-scroll-area-viewport],
